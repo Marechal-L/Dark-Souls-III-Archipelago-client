@@ -1,12 +1,15 @@
 #include "Core.h"
+#include "GameHook.h"
 
 CCore* Core;
+CGameHook* GameHook;
 SCore* CoreStruct;
 
 VOID CCore::Start() {
 
 	Core = new CCore();
 	CoreStruct = new SCore();
+	GameHook = new CGameHook();
 
 	CoreStruct->hHeap = HeapCreate(8, 0x10000, 0);
 	if (!CoreStruct->hHeap) {
@@ -39,21 +42,31 @@ VOID CCore::Start() {
 
 BOOL CCore::Initialise() {
 
+	//Setup the client console
 	FILE* fp;
-
 	AllocConsole();
 	SetConsoleTitleA("Dark Souls III - Item Randomiser Console");
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Starting DS3 ...\n");
-
+	
+	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
+
+
+	//Inject custom shell codes
+	GameHook->initialize();
 
 	return true;
 }
 
 
 VOID CCore::Run() {
+
+	GameHook->updateRuntimeValues();
+	if(GameHook->healthPointRead != 0) {
+		printf("healthPoint : %d\n", GameHook->healthPoint);
+	}
 
 	return;
 };
