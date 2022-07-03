@@ -1,0 +1,3 @@
+[submodule "archipelago-client/subprojects/minhook"]
+	path = archipelago-client/subprojects/minhook
+	url = https://github.com/TsudaKageyu/minhook.git
