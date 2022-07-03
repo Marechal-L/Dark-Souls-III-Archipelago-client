@@ -47,6 +47,8 @@ BOOL CCore::Initialise() {
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Starting DS3 ...\n");
 
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
+
 	return true;
 }
 
@@ -89,3 +91,18 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 
 	return;
 };
+
+
+VOID CCore::InputCommand() {
+	while (true) {
+		std::string line;
+		std::getline(std::cin, line);
+
+		if (line == "/help") {
+			printf("List of available commands : \n");
+			printf("/help : Prints this help message.\n");
+		}
+	}
+};
+
+

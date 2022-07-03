@@ -30,9 +30,9 @@ struct SCore;
 class CCore {
 public:
 	static VOID Start();
+	static VOID InputCommand();
 	virtual VOID Run();
 	virtual BOOL Initialise();
-	//virtual VOID InputCommand();
 	virtual VOID Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD dIsFatalError);
 };
 
