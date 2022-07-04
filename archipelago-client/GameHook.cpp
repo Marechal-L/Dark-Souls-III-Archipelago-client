@@ -1,19 +1,29 @@
 #include "GameHook.h"
 
+
+DWORD64 rItemRandomiser = 0;
+DWORD64 qItemEquipComms = 0;
+
 BOOL CGameHook::initialize() {
+
+	BOOL bReturn = true;
 
 	//Inject ItemGibData
 	LPVOID itemGibDataCodeCave = InjectShellCode(nullptr, ItemGibDataShellcode, 17);
 
 	//Modify ItemGibShellcode
-	replaceShellCodeAddress(ItemGibShellcode, 0, itemGibDataCodeCave, 15, sizeof(void*));
-	replaceShellCodeAddress(ItemGibShellcode, 4, itemGibDataCodeCave, 26, 4);
-	replaceShellCodeAddress(ItemGibShellcode, 8, itemGibDataCodeCave, 33, 4);
+	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 0, itemGibDataCodeCave, 15, sizeof(void*));
+	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 4, itemGibDataCodeCave, 26, 4);
+	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 8, itemGibDataCodeCave, 33, 4);
 
 	//Inject ItemGibShellcode
 	LPVOID itemGibCodeCave = InjectShellCode((LPVOID)0x13ffe0000, ItemGibShellcode, 93);
 
-	return true;
+	if (MH_Initialize() != MH_OK) return false;
+
+	bReturn &= Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+
+	return bReturn;
 }
 
 BOOL CGameHook::updateRuntimeValues() {
@@ -32,7 +42,8 @@ BOOL CGameHook::updateRuntimeValues() {
 
 BOOL CGameHook::Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen) {
 
-	if (MH_CreateHook((LPVOID)qAddress, (LPVOID)qDetour, 0) != MH_OK) return false;
+	MH_STATUS status = MH_CreateHook((LPVOID)qAddress, (LPVOID)qDetour, 0);
+	if (status != MH_OK) return false;
 	if (MH_EnableHook((LPVOID)qAddress) != MH_OK) return false;
 
 	*pReturn = (qAddress + dByteLen);

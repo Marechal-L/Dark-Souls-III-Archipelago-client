@@ -3,6 +3,7 @@
 
 CCore* Core;
 CGameHook* GameHook;
+CItemRandomiser* ItemRandomiser;
 SCore* CoreStruct;
 
 VOID CCore::Start() {
@@ -10,6 +11,7 @@ VOID CCore::Start() {
 	Core = new CCore();
 	CoreStruct = new SCore();
 	GameHook = new CGameHook();
+	ItemRandomiser = new CItemRandomiser();
 
 	CoreStruct->hHeap = HeapCreate(8, 0x10000, 0);
 	if (!CoreStruct->hHeap) {
@@ -55,7 +57,7 @@ BOOL CCore::Initialise() {
 
 
 	//Inject custom shell codes
-	GameHook->initialize();
+	BOOL initResult = GameHook->initialize();
 
 	return true;
 }

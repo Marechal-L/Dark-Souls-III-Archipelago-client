@@ -13,17 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\Core">
+      <UniqueIdentifier>{d022946f-5671-4e6f-bb3f-a4c95d96d0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\GameHook">
+      <UniqueIdentifier>{61abdb85-266d-4773-81e4-6e62dad5fe60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dinput8.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameHook.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="subprojects\minhook\src\buffer.c">
       <Filter>Fichiers de ressources</Filter>
     </ClCompile>
@@ -38,6 +35,18 @@
     </ClCompile>
     <ClCompile Include="subprojects\minhook\src\hde\hde64.c">
       <Filter>Fichiers de ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameHook.cpp">
+      <Filter>Fichiers sources\GameHook</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="dinput8.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemRandomiser.cpp">
+      <Filter>Fichiers sources\GameHook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,12 +80,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dinput8.def">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Core</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="dinput8_asm.asm">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Core</Filter>
+    </MASM>
+    <MASM Include="D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\_ItemRandomiser.asm">
+      <Filter>Fichiers sources\GameHook</Filter>
     </MASM>
   </ItemGroup>
 </Project>

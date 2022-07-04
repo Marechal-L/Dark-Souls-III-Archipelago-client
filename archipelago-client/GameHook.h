@@ -57,3 +57,16 @@ private:
 	};
 
 };
+
+
+class CItemRandomiser {
+public:
+	virtual VOID RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+};
+
+
+extern "C" DWORD64 qItemEquipComms;
+
+extern "C" DWORD64 rItemRandomiser;
+extern "C" VOID tItemRandomiser();
+extern "C" VOID fItemRandomiser(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
