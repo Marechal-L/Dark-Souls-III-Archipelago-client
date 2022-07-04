@@ -34,7 +34,7 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
-		dItemID = 0x40000172;
+		dItemID = 0x11406F40;
 
 		*(int*)(pItemBuffer) = dItemID;
 		*(int*)(pItemBuffer + 0x04) = dItemQuantity;

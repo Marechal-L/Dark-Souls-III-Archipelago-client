@@ -149,10 +149,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AutoEquip.cpp" />
     <ClCompile Include="dinput8.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="GameHook.cpp" />
     <ClCompile Include="ItemRandomiser.cpp" />
+    <ClCompile Include="NoRequirements.cpp" />
     <ClCompile Include="subprojects\minhook\src\buffer.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde32.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde64.c" />
@@ -171,8 +173,10 @@
     <ClInclude Include="subprojects\minhook\src\trampoline.h" />
   </ItemGroup>
   <ItemGroup>
+    <MASM Include="_AutoEquip.asm" />
+    <MASM Include="_ItemRandomiser.asm" />
+    <MASM Include="_NoRequirements.asm" />
     <None Include="dinput8.def" />
-    <MASM Include="D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\_ItemRandomiser.asm" />
     <MASM Include="dinput8_asm.asm">
       <FileType>Document</FileType>
     </MASM>

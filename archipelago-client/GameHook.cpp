@@ -1,8 +1,11 @@
 #include "GameHook.h"
 
+DWORD64 qItemEquipComms = 0;
 
 DWORD64 rItemRandomiser = 0;
-DWORD64 qItemEquipComms = 0;
+DWORD64 rAutoEquip = 0;
+DWORD64 rNoWeaponRequirements = 0;
+DWORD64 rEquipLock = 0;
 
 BOOL CGameHook::initialize() {
 
@@ -22,6 +25,8 @@ BOOL CGameHook::initialize() {
 	if (MH_Initialize() != MH_OK) return false;
 
 	bReturn &= Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+	bReturn &= Hook(0x1407BBE92, (DWORD64)&tAutoEquip, &rAutoEquip, 6);
+	bReturn &= Hook(0x140C073B9, (DWORD64)&tNoWeaponRequirements, &rNoWeaponRequirements, 7);
 
 	return bReturn;
 }

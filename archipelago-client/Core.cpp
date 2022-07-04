@@ -4,6 +4,7 @@
 CCore* Core;
 CGameHook* GameHook;
 CItemRandomiser* ItemRandomiser;
+CAutoEquip* AutoEquip;
 SCore* CoreStruct;
 
 VOID CCore::Start() {
@@ -12,6 +13,8 @@ VOID CCore::Start() {
 	CoreStruct = new SCore();
 	GameHook = new CGameHook();
 	ItemRandomiser = new CItemRandomiser();
+	AutoEquip = new CAutoEquip();
+	AutoEquip->EquipItem = (fEquipItem*)0x140AFBBB0;
 
 	CoreStruct->hHeap = HeapCreate(8, 0x10000, 0);
 	if (!CoreStruct->hHeap) {

@@ -48,6 +48,12 @@
     <ClCompile Include="ItemRandomiser.cpp">
       <Filter>Fichiers sources\GameHook</Filter>
     </ClCompile>
+    <ClCompile Include="AutoEquip.cpp">
+      <Filter>Fichiers sources\GameHook</Filter>
+    </ClCompile>
+    <ClCompile Include="NoRequirements.cpp">
+      <Filter>Fichiers sources\GameHook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -87,7 +93,13 @@
     <MASM Include="dinput8_asm.asm">
       <Filter>Fichiers sources\Core</Filter>
     </MASM>
-    <MASM Include="D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\_ItemRandomiser.asm">
+    <MASM Include="_AutoEquip.asm">
+      <Filter>Fichiers sources\GameHook</Filter>
+    </MASM>
+    <MASM Include="_NoRequirements.asm">
+      <Filter>Fichiers sources\GameHook</Filter>
+    </MASM>
+    <MASM Include="_ItemRandomiser.asm">
       <Filter>Fichiers sources\GameHook</Filter>
     </MASM>
   </ItemGroup>

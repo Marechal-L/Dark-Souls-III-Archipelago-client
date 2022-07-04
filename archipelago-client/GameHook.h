@@ -2,6 +2,14 @@
 #include "Core.h"
 #include "./subprojects/minhook/include/MinHook.h"
 
+#define ItemType_Weapon 0
+#define ItemType_Protector 1
+#define ItemType_Accessory 2
+#define ItemType_Goods 4
+
+struct SEquipBuffer;
+
+typedef VOID fEquipItem(DWORD dSlot, SEquipBuffer* E);
 
 class CGameHook {
 public:
@@ -64,9 +72,35 @@ public:
 	virtual VOID RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
 };
 
+class CAutoEquip {
+public:
+	virtual VOID AutoEquipItem(UINT_PTR pItemBuffer, DWORD64 qReturnAddress);
+	virtual BOOL SortItem(DWORD dItemID, SEquipBuffer* E);
+	virtual BOOL FindEquipType(DWORD dItem, DWORD* pArray);
+	virtual DWORD GetInventorySlotID(DWORD dItemID);
+	virtual VOID LockUnlockEquipSlots(int iIsUnlock);
+	fEquipItem* EquipItem; //0x140AFBBB0
+};
+
+struct SEquipBuffer {
+	DWORD dUn1;
+	DWORD dUn2;
+	DWORD dEquipSlot;
+	char unkBytes[0x2C];
+	DWORD dInventorySlot;
+	char paddingBytes[0x60];
+};
 
 extern "C" DWORD64 qItemEquipComms;
 
 extern "C" DWORD64 rItemRandomiser;
 extern "C" VOID tItemRandomiser();
 extern "C" VOID fItemRandomiser(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+
+extern "C" DWORD64 rAutoEquip;
+extern "C" VOID tAutoEquip();
+extern "C" VOID fAutoEquip(UINT_PTR pItemBuffer, DWORD64 pItemData, DWORD64 qReturnAddress);
+
+extern "C" DWORD64 rNoWeaponRequirements;
+extern "C" VOID tNoWeaponRequirements();
+extern "C" VOID fNoWeaponRequirements(DWORD * pRequirementPtr);
