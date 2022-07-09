@@ -43,8 +43,10 @@ public:
 	virtual BOOL Initialise();
 	virtual VOID Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD dIsFatalError);
 	virtual VOID ReadConfigFiles();
+	virtual VOID SaveConfigFiles();
 
 	std::string pSlotName;
 	std::string pSeed;
+	BOOL saveConfigFiles = false;
 	std::list<std::string> pReceivedLocations = { };
 };

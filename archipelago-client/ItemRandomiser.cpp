@@ -34,6 +34,10 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
+#ifdef DEBUG
+		printf("dItemID : %d\n", dItemID);
+#endif
+
 		//Specific case for the gesture
 		if (dItemID == 0x40002346) {
 			enablePathOfTheDragon = true;
@@ -57,6 +61,9 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 				//The item is for another player, give a Prism shard
 				dItemID = 0x40000172;
 			}
+
+			checkedLocationsList.push_front(pLocationsId[serverLocationIndex]);
+
 		} else { 
 			//Nothing to do, this is a vanilla item so we will let it go to the player's inventory	
 		}

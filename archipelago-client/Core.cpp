@@ -1,6 +1,7 @@
 #include "Core.h"
 #include "GameHook.h"
 
+
 CCore* Core;
 CGameHook* GameHook;
 CItemRandomiser* ItemRandomiser;
@@ -69,6 +70,10 @@ VOID CCore::Run() {
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
 		GameHook->giveItems();
 	}
+
+	ArchipelagoInterface->update();
+
+	SaveConfigFiles();
 
 	return;
 };
@@ -166,6 +171,15 @@ VOID CCore::ReadConfigFiles() {
 	j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements);
 
 
+	std::string filename = Core->pSeed + ".json";
+	std::ifstream locations(filename);
+
+	if (locations) {
+		json k;
+		locations >> k;
+		k.at("received_locations").get_to(pReceivedLocations);
+	}
+
 	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
 	printf("auto-equip enabled : %d\n", GameHook->dIsAutoEquip);
 	printf("lock-equip-slot enabled : %d\n", GameHook->dLockEquipSlots);
@@ -173,5 +187,22 @@ VOID CCore::ReadConfigFiles() {
 
 
 };
+
+VOID CCore::SaveConfigFiles() {
+
+	if (!saveConfigFiles)
+		return;
+
+	saveConfigFiles = false;
+
+	std::string filename = Core->pSeed + ".json";
+	std::ofstream outfile(filename);
+
+	json j;
+	j["received_locations"] = pReceivedLocations;
+
+	outfile << std::setw(4) << j << std::endl;
+
+}
 
 

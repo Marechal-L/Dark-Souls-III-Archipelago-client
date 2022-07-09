@@ -82,6 +82,7 @@ private:
 class CItemRandomiser {
 public:
 	virtual VOID RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+	
 	std::vector<DWORD> pLocationsId = { };
 	std::vector<DWORD> pLocationsAddress = { };
 	std::vector<DWORD> pLocationsTarget = { };
@@ -89,7 +90,9 @@ public:
 	std::vector<DWORD> pItemsAddress = { };
 	int pBaseId = 0;
 	std::deque<DWORD> receivedItemsQueue = { };
+	std::list<int64_t> checkedLocationsList = { };
 	bool enablePathOfTheDragon;
+
 private:
 	int isARandomizedLocation(DWORD dItemID);
 	BOOL isReceivedFromServer(DWORD dItemID);

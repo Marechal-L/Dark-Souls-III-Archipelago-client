@@ -56,15 +56,29 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 			//Ignore the item except if it is a multiple items
 			if (ignoreItem && itemname != "Soul of an Intrepid Hero") {
-				printf("ignoreItem : %s\n", itemname);
+				printf("ignoreItem : %s\n", itemname.c_str());
 				continue;
 			}
 
 			//Add the item to list of already received items
+			Core->saveConfigFiles = true;
 			Core->pReceivedLocations.push_back(location);
 
-			ItemRandomiser->receivedItemsQueue.push_front((DWORD)item.item);
+			//Determine the item address
+			DWORD address = 0;
+			for (int i = 0; i < ItemRandomiser->pItemsId.size(); i++) {
+				if (ItemRandomiser->pItemsId[i] == item.item) {
+					address = ItemRandomiser->pItemsAddress[i];
+					break;
+				}
+			}
+			if (address == 0) {
+				std::cout << "items_received_handler " << itemname.c_str() << " not found" << "\n";
+				return;
+			}
+
 			printf("  #%d: %s (%" PRId64 ") from %s - %s\n", item.index, itemname.c_str(), item.item, sender.c_str(), location.c_str());
+			ItemRandomiser->receivedItemsQueue.push_front((DWORD)address);
 		}
 		});
 
@@ -87,4 +101,17 @@ VOID CArchipelago::say(std::string message) {
 	if (ap && ap->get_state() == APClient::State::SLOT_CONNECTED) {
 		ap->Say(message);
 	}
+}
+
+VOID CArchipelago::update() {
+	if (ap) ap->poll();
+
+	if (ap && ap->get_state() == APClient::State::SLOT_CONNECTED) {
+		if (ap && !ItemRandomiser->checkedLocationsList.empty()) {
+			if (ap->LocationChecks(ItemRandomiser->checkedLocationsList)) {
+				ItemRandomiser->checkedLocationsList.clear();
+			}
+		}
+	}
+
 }

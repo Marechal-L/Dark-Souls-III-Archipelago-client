@@ -11,4 +11,5 @@ class CArchipelago {
 public:
 	BOOL Initialise(std::string URI);
 	VOID say(std::string message);
+	VOID update();
 };
