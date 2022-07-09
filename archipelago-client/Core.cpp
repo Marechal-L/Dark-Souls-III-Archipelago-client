@@ -7,6 +7,8 @@ CItemRandomiser* ItemRandomiser;
 CAutoEquip* AutoEquip;
 SCore* CoreStruct;
 
+using nlohmann::json;
+
 VOID CCore::Start() {
 
 	Core = new CCore();
@@ -15,12 +17,6 @@ VOID CCore::Start() {
 	ItemRandomiser = new CItemRandomiser();
 	AutoEquip = new CAutoEquip();
 	AutoEquip->EquipItem = (fEquipItem*)0x140AFBBB0;
-
-	CoreStruct->hHeap = HeapCreate(8, 0x10000, 0);
-	if (!CoreStruct->hHeap) {
-		Core->Panic("Unable to allocate appropriate heap", "...\\Randomiser\\Core\\Core.cpp", FE_MemError, 1);
-		int3
-	};
 
 	if (!Core->Initialise()) {
 		Core->Panic("Failed to initialise", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
@@ -32,15 +28,11 @@ VOID CCore::Start() {
 		Sleep(1000);
 	};
 
-	if (!HeapFree(CoreStruct->hHeap, 8, CoreStruct->pItemArray)) {
-		Core->Panic("Given memory block appears invalid, or freed already", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
-		int3
-	};
-
-	HeapDestroy(CoreStruct->hHeap);
-
 	delete CoreStruct;
 	delete Core;
+	delete GameHook;
+	delete ItemRandomiser;
+	delete AutoEquip;
 
 	return;
 };
@@ -58,9 +50,10 @@ BOOL CCore::Initialise() {
 	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
 
-
 	//Inject custom shell codes
 	BOOL initResult = GameHook->initialize();
+
+	ReadConfigFiles();
 
 	return true;
 }
@@ -89,21 +82,16 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 		OutputDebugStringA(pOutput);
 	};
 
-	if (CoreStruct->dIsDebug) {
-		printf_s("CCore::Panic is outputting debug-mode error information\n");
-		sprintf_s(pOutput, "%s\n", pOutput);
-		printf_s(pOutput);
+	
+	if (dIsFatalError) {
+		sprintf_s(pTitle, "[Item Randomiser - Fatal Error]");
 	}
 	else {
-		if (dIsFatalError) {
-			sprintf_s(pTitle, "[Item Randomiser - Fatal Error]");
-		}
-		else {
-			sprintf_s(pTitle, "[Item Randomiser - Error]");
-		};
-
-		MessageBoxA(NULL, pOutput, pTitle, MB_ICONERROR);
+		sprintf_s(pTitle, "[Item Randomiser - Error]");
 	};
+
+	MessageBoxA(NULL, pOutput, pTitle, MB_ICONERROR);
+	
 
 	if (dIsFatalError) *(int*)0 = 0;
 
@@ -121,6 +109,38 @@ VOID CCore::InputCommand() {
 			printf("/help : Prints this help message.\n");
 		}
 	}
+};
+
+VOID CCore::ReadConfigFiles() {
+	
+	printf("Reading AP.json\n");
+
+	// read the archipelago json file
+	std::ifstream i("AP.json");
+	json j;
+	i >> j;
+
+	j.at("locationsId").get_to(ItemRandomiser->pLocationsId);
+	j.at("locationsAddress").get_to(ItemRandomiser->pLocationsAddress);
+	j.at("locationsTarget").get_to(ItemRandomiser->pLocationsTarget);
+	j.at("itemsId").get_to(ItemRandomiser->pItemsId);
+	j.at("itemsAddress").get_to(ItemRandomiser->pItemsAddress);
+	j.at("base_id").get_to(ItemRandomiser->pBaseId);
+
+	j.at("seed").get_to(Core->pSeed);
+	j.at("slot").get_to(Core->pSlotName);
+
+	j.at("options").at("auto_equip").get_to(CoreStruct->dIsAutoEquip);
+	j.at("options").at("lock_equip").get_to(CoreStruct->dLockEquipSlots);
+	j.at("options").at("no_weapon_requirements").get_to(CoreStruct->dIsNoWeaponRequirements);
+
+
+	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
+	printf("auto-equip enabled : %d\n", CoreStruct->dIsAutoEquip);
+	printf("lock-equip-slot enabled : %d\n", CoreStruct->dLockEquipSlots);
+	printf("no-weapon-requirements enabled : %d\n", CoreStruct->dIsNoWeaponRequirements);
+
+
 };
 
 

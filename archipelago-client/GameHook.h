@@ -70,6 +70,12 @@ private:
 class CItemRandomiser {
 public:
 	virtual VOID RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+	std::vector<DWORD> pLocationsId = { };
+	std::vector<DWORD> pLocationsAddress = { };
+	std::vector<DWORD> pLocationsTarget = { };
+	std::vector<DWORD> pItemsId = { };
+	std::vector<DWORD> pItemsAddress = { };
+	int pBaseId = 0;
 };
 
 class CAutoEquip {
