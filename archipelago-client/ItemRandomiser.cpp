@@ -34,7 +34,29 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
-		dItemID = 0x11406F40;
+
+
+		//Make some checks about the item picked by the player
+		int serverLocationIndex = -1;
+		int locationTargetItem = 0;
+
+		//Check if the item is received from the server
+		if (isReceivedFromServer(dItemID)) {
+			receivedItemsQueue.pop_back();
+			//Nothing to do, just let the item go to the player's inventory
+		} else if ((serverLocationIndex = isARandomizedLocation(dItemID)) != -1) { //Check if the item is a randomized location
+			//From here, the item is considered as a location!	
+			//Check if the location contains a item for the local player
+			
+			if ((locationTargetItem = pLocationsTarget[serverLocationIndex]) != 0) {
+				dItemID = locationTargetItem;
+			} else {
+				//The item is for another player, give a Prism shard
+				dItemID = 0x40000172;
+			}
+		} else { 
+			//Nothing to do, this is a vanilla item so we will let it go to the player's inventory	
+		}
 
 		*(int*)(pItemBuffer) = dItemID;
 		*(int*)(pItemBuffer + 0x04) = dItemQuantity;
@@ -45,5 +67,22 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 	};
 
 	return;
+}
 
+int CItemRandomiser::isARandomizedLocation(DWORD dItemID) {
+	for (int i = 0; i < pLocationsAddress.size(); ++i) {
+		if (dItemID == pLocationsAddress[i]) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+BOOL CItemRandomiser::isReceivedFromServer(DWORD dItemID) {
+	for (DWORD item : receivedItemsQueue) {
+		if (dItemID == item) {
+			return true;
+		}
+	}
+	return false;
 }

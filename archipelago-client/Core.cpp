@@ -12,7 +12,6 @@ using nlohmann::json;
 VOID CCore::Start() {
 
 	Core = new CCore();
-	CoreStruct = new SCore();
 	GameHook = new CGameHook();
 	ItemRandomiser = new CItemRandomiser();
 	AutoEquip = new CAutoEquip();
@@ -25,7 +24,7 @@ VOID CCore::Start() {
 
 	while (true) {
 		Core->Run();
-		Sleep(1000);
+		Sleep(2000);
 	};
 
 	delete CoreStruct;
@@ -52,6 +51,10 @@ BOOL CCore::Initialise() {
 
 	//Inject custom shell codes
 	BOOL initResult = GameHook->initialize();
+	if (!initResult) {
+		Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
+		int3
+	}
 
 	ReadConfigFiles();
 
@@ -62,8 +65,11 @@ BOOL CCore::Initialise() {
 VOID CCore::Run() {
 
 	GameHook->updateRuntimeValues();
-	if(GameHook->healthPointRead != 0) {
-		printf("healthPoint : %d\n", GameHook->healthPoint);
+	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
+
+		if (!ItemRandomiser->receivedItemsQueue.empty()) {
+			GameHook->itemGib(ItemRandomiser->receivedItemsQueue.back());
+		}
 	}
 
 	return;
@@ -92,7 +98,6 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 
 	MessageBoxA(NULL, pOutput, pTitle, MB_ICONERROR);
 	
-
 	if (dIsFatalError) *(int*)0 = 0;
 
 	return;
@@ -107,6 +112,12 @@ VOID CCore::InputCommand() {
 		if (line == "/help") {
 			printf("List of available commands : \n");
 			printf("/help : Prints this help message.\n");
+		}
+
+		if (line.find("/itemGib ") == 0) {
+			std::string param = line.substr(9);
+			std::cout << "/itemGib executed with " << param << "\n";
+			GameHook->itemGib(std::stoi(param));
 		}
 	}
 };
@@ -130,15 +141,15 @@ VOID CCore::ReadConfigFiles() {
 	j.at("seed").get_to(Core->pSeed);
 	j.at("slot").get_to(Core->pSlotName);
 
-	j.at("options").at("auto_equip").get_to(CoreStruct->dIsAutoEquip);
-	j.at("options").at("lock_equip").get_to(CoreStruct->dLockEquipSlots);
-	j.at("options").at("no_weapon_requirements").get_to(CoreStruct->dIsNoWeaponRequirements);
+	j.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip);
+	j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots);
+	j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements);
 
 
 	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
-	printf("auto-equip enabled : %d\n", CoreStruct->dIsAutoEquip);
-	printf("lock-equip-slot enabled : %d\n", CoreStruct->dLockEquipSlots);
-	printf("no-weapon-requirements enabled : %d\n", CoreStruct->dIsNoWeaponRequirements);
+	printf("auto-equip enabled : %d\n", GameHook->dIsAutoEquip);
+	printf("lock-equip-slot enabled : %d\n", GameHook->dLockEquipSlots);
+	printf("no-weapon-requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
 
 
 };

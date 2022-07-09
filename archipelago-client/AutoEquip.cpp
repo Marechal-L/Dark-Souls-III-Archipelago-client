@@ -3,6 +3,7 @@
 extern CCore* Core;
 extern CAutoEquip* AutoEquip;
 extern SCore* CoreStruct;
+extern CGameHook* GameHook;
 
 DWORD dRingSlotSelect = 0x11;
 DWORD pHelmetList[110];
@@ -128,7 +129,7 @@ DWORD CAutoEquip::GetInventorySlotID(DWORD dItemID) {
 	UINT_PTR qInventoryPtr = 0;
 	UINT_PTR qInventoryScanPtr = 0;
 
-	qInventoryPtr = *(UINT_PTR*)CoreStruct->qLocalPlayer;
+	qInventoryPtr = *(UINT_PTR*)GameHook->qLocalPlayer;
 	qInventoryPtr = *(UINT_PTR*)(qInventoryPtr + 0x10);
 	if (!qInventoryPtr) {
 		Core->Panic("'Local Player' does not exist", "...\\Source\\AutoEquip\\AutoEquip.cpp", HE_NoPlayerChar, 1);
@@ -159,7 +160,7 @@ VOID CAutoEquip::LockUnlockEquipSlots(int iIsUnlock) {
 	UINT_PTR qWorldChrMan = 0;
 	DWORD dChrEquipAnimFlags = 0;
 
-	qWorldChrMan = *(UINT_PTR*)(CoreStruct->qWorldChrMan);
+	qWorldChrMan = *(UINT_PTR*)(GameHook->qWorldChrMan);
 	if (!qWorldChrMan) {
 		Core->Panic("WorldChrMan", "...\\Source\\AutoEquip\\AutoEquip.cpp", HE_NoPlayerChar, 1);
 		int3

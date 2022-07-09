@@ -40,13 +40,3 @@ public:
 	std::string pSlotName;
 	std::string pSeed;
 };
-
-struct SCore {
-	DWORD dIsAutoEquip;
-	DWORD dLockEquipSlots;
-	DWORD dIsNoWeaponRequirements;
-	UINT_PTR qLocalPlayer = 0x144740178;
-	UINT_PTR qWorldChrMan = 0x144768E78;
-	UINT_PTR qSprjLuaEvent = 0x14473A9C8;
-	HANDLE hHeap;
-};

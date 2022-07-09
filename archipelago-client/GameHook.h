@@ -15,8 +15,18 @@ class CGameHook {
 public:
 	virtual BOOL initialize();
 	virtual BOOL updateRuntimeValues();
+	virtual VOID itemGib(DWORD itemId);
 	int healthPoint, playTime;
 	SIZE_T healthPointRead, playTimeRead;
+
+	DWORD dIsAutoEquip;
+	DWORD dLockEquipSlots;
+	DWORD dIsNoWeaponRequirements;
+	UINT_PTR qLocalPlayer = 0x144740178;
+	UINT_PTR qWorldChrMan = 0x144768E78;
+	UINT_PTR qSprjLuaEvent = 0x14473A9C8;
+	HANDLE hHeap;
+
 private:
 	static BOOL replaceShellCodeAddress(BYTE* shellcode, int shellCodeOffset, LPVOID codeCave, int codeCaveOffset, int length);
 	static LPVOID InjectShellCode(LPVOID address, BYTE* shellCode, size_t len);
@@ -25,6 +35,7 @@ private:
 	static uintptr_t GetModuleBaseAddress();
 	static uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsigned int> offsets);
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
+	static VOID LockEquipSlots();
 
 	
 
@@ -76,6 +87,10 @@ public:
 	std::vector<DWORD> pItemsId = { };
 	std::vector<DWORD> pItemsAddress = { };
 	int pBaseId = 0;
+	std::deque<DWORD> receivedItemsQueue = { };
+private:
+	int isARandomizedLocation(DWORD dItemID);
+	BOOL isReceivedFromServer(DWORD dItemID);
 };
 
 class CAutoEquip {
