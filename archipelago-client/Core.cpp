@@ -66,10 +66,7 @@ VOID CCore::Run() {
 
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
-
-		if (!ItemRandomiser->receivedItemsQueue.empty()) {
-			GameHook->itemGib(ItemRandomiser->receivedItemsQueue.back());
-		}
+		GameHook->giveItems();
 	}
 
 	return;

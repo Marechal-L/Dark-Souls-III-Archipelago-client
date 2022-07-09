@@ -15,7 +15,7 @@ class CGameHook {
 public:
 	virtual BOOL initialize();
 	virtual BOOL updateRuntimeValues();
-	virtual VOID itemGib(DWORD itemId);
+	virtual VOID giveItems();
 	int healthPoint, playTime;
 	SIZE_T healthPointRead, playTimeRead;
 
@@ -36,6 +36,7 @@ private:
 	static uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsigned int> offsets);
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
 	static VOID LockEquipSlots();
+	static VOID itemGib(DWORD itemId);
 
 	
 
@@ -88,6 +89,7 @@ public:
 	std::vector<DWORD> pItemsAddress = { };
 	int pBaseId = 0;
 	std::deque<DWORD> receivedItemsQueue = { };
+	bool enablePathOfTheDragon;
 private:
 	int isARandomizedLocation(DWORD dItemID);
 	BOOL isReceivedFromServer(DWORD dItemID);

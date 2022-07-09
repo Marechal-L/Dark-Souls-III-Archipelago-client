@@ -50,6 +50,28 @@ BOOL CGameHook::updateRuntimeValues() {
 	ReadProcessMemory(hProcess, (BYTE*)playTimeAddr, &playTime, sizeof(playTime), &playTimeRead);
 }
 
+VOID CGameHook::giveItems() {
+	DWORD processId = GetCurrentProcessId();
+	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
+
+	//Send the next item in the list
+	if (!ItemRandomiser->receivedItemsQueue.empty()) {
+		itemGib(ItemRandomiser->receivedItemsQueue.back());
+	}
+	
+	//Enable the Path of The Dragon Gesture manually when receiving the item
+	if (ItemRandomiser->enablePathOfTheDragon) {
+		ItemRandomiser->enablePathOfTheDragon = false;
+
+		std::vector<unsigned int> pathOfDragonOffsets = { 0x10, 0x7B8, 0x90 };
+		uintptr_t gestureAddr = FindExecutableAddress(0x4740178, pathOfDragonOffsets); //BaseA + Path of the dragon Offsets
+
+		char gestureUnlocked = 0x43;
+		WriteProcessMemory(hProcess, (BYTE*)gestureAddr, &gestureUnlocked, sizeof(gestureUnlocked), nullptr);
+	}
+
+}
+
 VOID CGameHook::itemGib(DWORD itemId) {
 
 	DWORD processId = GetCurrentProcessId();

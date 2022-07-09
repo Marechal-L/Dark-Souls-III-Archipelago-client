@@ -34,7 +34,10 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
-
+		//Specific case for the gesture
+		if (dItemID == 0x40002346) {
+			enablePathOfTheDragon = true;
+		}
 
 		//Make some checks about the item picked by the player
 		int serverLocationIndex = -1;
