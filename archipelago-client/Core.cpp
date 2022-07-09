@@ -110,6 +110,9 @@ VOID CCore::InputCommand() {
 		if (line == "/help") {
 			printf("List of available commands : \n");
 			printf("/help : Prints this help message.\n");
+			printf("!help : Prints the help message related to Archipelago.\n");
+			printf("/connect {SERVER_IP}:{SERVER_PORT} : Connect to the specified server.\n");
+			printf("/connect : Connect to the localhost:38281 server.\n");
 		}
 
 		if (line.find("/itemGib ") == 0) {
@@ -131,6 +134,10 @@ VOID CCore::InputCommand() {
 				Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
 				int3
 			}
+		}
+
+		if (line.find("!") == 0) {
+			ArchipelagoInterface->say(line);
 		}
 	}
 };
