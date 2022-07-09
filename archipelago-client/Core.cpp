@@ -6,6 +6,7 @@ CGameHook* GameHook;
 CItemRandomiser* ItemRandomiser;
 CAutoEquip* AutoEquip;
 SCore* CoreStruct;
+CArchipelago* ArchipelagoInterface;
 
 using nlohmann::json;
 
@@ -114,7 +115,22 @@ VOID CCore::InputCommand() {
 		if (line.find("/itemGib ") == 0) {
 			std::string param = line.substr(9);
 			std::cout << "/itemGib executed with " << param << "\n";
-			ItemRandomiser->receivedItemsQueue.push_back(std::stoi(param));
+			ItemRandomiser->receivedItemsQueue.push_front(std::stoi(param));
+		}
+
+		if (line.find("/connect ") == 0) {
+			std::string param = line.substr(9);
+			if (!ArchipelagoInterface->Initialise(param)) {
+				Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
+				int3
+			}
+		}
+
+		if (line == "/connect") {
+			if (!ArchipelagoInterface->Initialise("localhost:38281")) {
+				Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
+				int3
+			}
 		}
 	}
 };

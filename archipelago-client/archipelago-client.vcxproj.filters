@@ -19,6 +19,9 @@
     <Filter Include="Fichiers sources\GameHook">
       <UniqueIdentifier>{61abdb85-266d-4773-81e4-6e62dad5fe60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\ArchipelagoClient">
+      <UniqueIdentifier>{df84d9bb-1511-470a-a89a-f35a9682782a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subprojects\minhook\src\buffer.c">
@@ -54,6 +57,12 @@
     <ClCompile Include="NoRequirements.cpp">
       <Filter>Fichiers sources\GameHook</Filter>
     </ClCompile>
+    <ClCompile Include="ArchipelagoInterface.cpp">
+      <Filter>Fichiers sources\ArchipelagoClient</Filter>
+    </ClCompile>
+    <ClCompile Include="subprojects\wswrap\src\wswrap.cpp">
+      <Filter>Fichiers de ressources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -82,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="subprojects\minhook\src\hde\table64.h">
       <Filter>Fichiers de ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchipelagoInterface.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\asio\asio\include\asio.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

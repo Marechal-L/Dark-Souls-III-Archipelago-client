@@ -1,5 +1,9 @@
 #pragma once
+#define ASIO_STANDALONE
+#define _WEBSOCKETPP_CPP11_INTERNAL_
+#define _CRT_SECURE_NO_WARNINGS
 
+#include "subprojects/apclientpp/apclient.hpp"
 #include <windows.h>
 #include <Windows.h>
 #include <iostream>
@@ -12,6 +16,7 @@
 #include <stdio.h>
 #include <functional>
 #include "./subprojects/json/include/nlohmann/json.hpp"
+#include "ArchipelagoInterface.h"
 
 #define int3 __debugbreak();
 
@@ -25,6 +30,8 @@
 #define HE_InvalidInventoryEquipID 7
 #define HE_Undefined 8
 #define HE_NoPlayerChar 9
+#define AP_InitFailed 10
+
 
 struct SCore;
 
@@ -39,4 +46,5 @@ public:
 
 	std::string pSlotName;
 	std::string pSeed;
+	std::list<std::string> pReceivedLocations = { };
 };

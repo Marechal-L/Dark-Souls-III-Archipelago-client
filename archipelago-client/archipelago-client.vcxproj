@@ -136,9 +136,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DINPUT8_EXPORTS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\json\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\websocketpp;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\valijson\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\wswrap\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\asio\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,15 +156,19 @@
     <ClCompile Include="GameHook.cpp" />
     <ClCompile Include="ItemRandomiser.cpp" />
     <ClCompile Include="NoRequirements.cpp" />
+    <ClCompile Include="ArchipelagoInterface.cpp" />
     <ClCompile Include="subprojects\minhook\src\buffer.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde32.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde64.c" />
     <ClCompile Include="subprojects\minhook\src\hook.c" />
     <ClCompile Include="subprojects\minhook\src\trampoline.c" />
+    <ClCompile Include="subprojects\wswrap\src\wswrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="GameHook.h" />
+    <ClInclude Include="ArchipelagoInterface.h" />
+    <ClInclude Include="subprojects\asio\asio\include\asio.hpp" />
     <ClInclude Include="subprojects\minhook\src\buffer.h" />
     <ClInclude Include="subprojects\minhook\src\hde\hde32.h" />
     <ClInclude Include="subprojects\minhook\src\hde\hde64.h" />
