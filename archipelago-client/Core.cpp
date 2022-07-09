@@ -114,7 +114,7 @@ VOID CCore::InputCommand() {
 		if (line.find("/itemGib ") == 0) {
 			std::string param = line.substr(9);
 			std::cout << "/itemGib executed with " << param << "\n";
-			GameHook->itemGib(std::stoi(param));
+			ItemRandomiser->receivedItemsQueue.push_back(std::stoi(param));
 		}
 	}
 };
