@@ -46,8 +46,13 @@ BOOL CGameHook::updateRuntimeValues() {
 	std::vector<unsigned int> playTimeOffsets = { 0xA4 };
 	uintptr_t playTimeAddr = FindExecutableAddress(0x4740178, playTimeOffsets); //BaseA + PlayTime Offsets	
 
+	std::vector<unsigned int> soulOfCinderDefeatedFlagOffsets = { 0x00, 0x5F67 };
+	uintptr_t soulOfCinderDefeatedFlagAddress = FindExecutableAddress(0x473BE28, soulOfCinderDefeatedFlagOffsets); //GameFlagData + Sould of Cinder defeated flag Offsets	
+
 	ReadProcessMemory(hProcess, (BYTE*)healthPointAddr, &healthPoint, sizeof(healthPoint), &healthPointRead);
 	ReadProcessMemory(hProcess, (BYTE*)playTimeAddr, &playTime, sizeof(playTime), &playTimeRead);
+	ReadProcessMemory(hProcess, (BYTE*)soulOfCinderDefeatedFlagAddress, &soulOfCinderDefeated, sizeof(soulOfCinderDefeated), &soulOfCinderDefeatedFlagRead);
+
 }
 
 VOID CGameHook::giveItems() {
@@ -69,7 +74,11 @@ VOID CGameHook::giveItems() {
 		char gestureUnlocked = 0x43;
 		WriteProcessMemory(hProcess, (BYTE*)gestureAddr, &gestureUnlocked, sizeof(gestureUnlocked), nullptr);
 	}
+}
 
+BOOL CGameHook::isSoulOfCinderDefeated() {
+	constexpr std::uint8_t mask6{ 0b0100'0000 };
+	return soulOfCinderDefeatedFlagRead != 0 && (int)(soulOfCinderDefeated & mask6) == 64;
 }
 
 VOID CGameHook::itemGib(DWORD itemId) {

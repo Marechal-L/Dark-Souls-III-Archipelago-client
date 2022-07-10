@@ -16,8 +16,10 @@ public:
 	virtual BOOL initialize();
 	virtual BOOL updateRuntimeValues();
 	virtual VOID giveItems();
+	virtual BOOL isSoulOfCinderDefeated();
 	int healthPoint, playTime;
-	SIZE_T healthPointRead, playTimeRead;
+	char soulOfCinderDefeated;
+	SIZE_T healthPointRead, playTimeRead, soulOfCinderDefeatedFlagRead;
 
 	DWORD dIsAutoEquip;
 	DWORD dLockEquipSlots;

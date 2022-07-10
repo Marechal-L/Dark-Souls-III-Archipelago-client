@@ -113,5 +113,9 @@ VOID CArchipelago::update() {
 			}
 		}
 	}
+}
 
+VOID CArchipelago::gameFinished() {
+	printf("Game finished!\n");
+	if (ap) ap->StatusUpdate(APClient::ClientStatus::GOAL);
 }

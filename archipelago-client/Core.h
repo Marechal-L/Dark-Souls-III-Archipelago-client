@@ -48,5 +48,6 @@ public:
 	std::string pSlotName;
 	std::string pSeed;
 	BOOL saveConfigFiles = false;
+	BOOL sendGoalStatus = true;
 	std::list<std::string> pReceivedLocations = { };
 };

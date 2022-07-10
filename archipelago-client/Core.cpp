@@ -66,12 +66,18 @@ BOOL CCore::Initialise() {
 
 VOID CCore::Run() {
 
+	ArchipelagoInterface->update();
+
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
 		GameHook->giveItems();
+		if (GameHook->isSoulOfCinderDefeated() && sendGoalStatus) {
+			sendGoalStatus = false;
+			ArchipelagoInterface->gameFinished();
+		}
 	}
 
-	ArchipelagoInterface->update();
+	
 
 	SaveConfigFiles();
 
