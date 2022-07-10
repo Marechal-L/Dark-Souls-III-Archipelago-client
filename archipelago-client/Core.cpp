@@ -48,8 +48,7 @@ BOOL CCore::Initialise() {
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Starting DS3 ...\n");
 	
-	//Start command prompt
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
+	ReadConfigFiles();
 
 	//Inject custom shell codes
 	BOOL initResult = GameHook->initialize();
@@ -58,7 +57,8 @@ BOOL CCore::Initialise() {
 		int3
 	}
 
-	ReadConfigFiles();
+	//Start command prompt
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
 
 	return true;
 }
