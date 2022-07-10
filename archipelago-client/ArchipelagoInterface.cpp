@@ -64,12 +64,11 @@ BOOL CArchipelago::Initialise(std::string URI) {
 					continue;
 				}
 
-				//Add the item to list of already received items
-				Core->saveConfigFiles = true;
+				//Add the item to the list of already received items
 				Core->pReceivedLocations.push_back(location);
 			}
 
-			
+			printf("  #%d: %s (%" PRId64 ") from %s - %s\n", item.index, itemname.c_str(), item.item, sender.c_str(), location.c_str());
 
 			//Determine the item address
 			DWORD address = 0;
@@ -86,6 +85,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 			ItemRandomiser->receivedItemsQueue.push_front((DWORD)address);
 		}
+		Core->saveConfigFiles = true;
 		});
 
 	ap->set_data_package_changed_handler([](const json& data) {
