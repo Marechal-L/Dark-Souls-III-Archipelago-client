@@ -70,7 +70,13 @@ VOID CCore::Run() {
 
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
-		GameHook->giveItems();
+
+		if (!ItemRandomiser->receivedItemsQueue.empty()) {
+			GameHook->giveItems();
+			pLastReceivedIndex++;
+			saveConfigFiles = true;
+		}
+
 		if (GameHook->isSoulOfCinderDefeated() && sendGoalStatus) {
 			sendGoalStatus = false;
 			ArchipelagoInterface->gameFinished();
@@ -126,11 +132,13 @@ VOID CCore::InputCommand() {
 			printf("/connect : Connect to the localhost:38281 server.\n");
 		}
 
+#ifdef DEBUG
 		if (line.find("/itemGib ") == 0) {
 			std::string param = line.substr(9);
 			std::cout << "/itemGib executed with " << param << "\n";
 			ItemRandomiser->receivedItemsQueue.push_front(std::stoi(param));
 		}
+#endif
 
 		if (line.find("/connect ") == 0) {
 			std::string param = line.substr(9);
@@ -183,7 +191,8 @@ VOID CCore::ReadConfigFiles() {
 	if (locations) {
 		json k;
 		locations >> k;
-		k.at("received_locations").get_to(pReceivedLocations);
+		k.at("received_locations").get_to(pReceivedItems);
+		k.at("last_received_index").get_to(pLastReceivedIndex);
 	}
 
 	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
@@ -205,7 +214,8 @@ VOID CCore::SaveConfigFiles() {
 	std::ofstream outfile(filename);
 
 	json j;
-	j["received_locations"] = pReceivedLocations;
+	j["received_locations"] = pReceivedItems;
+	j["last_received_index"] = pLastReceivedIndex;
 
 	outfile << std::setw(4) << j << std::endl;
 

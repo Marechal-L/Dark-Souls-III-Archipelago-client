@@ -49,5 +49,6 @@ public:
 	std::string pSeed;
 	BOOL saveConfigFiles = false;
 	BOOL sendGoalStatus = true;
-	std::list<std::string> pReceivedLocations = { };
+	std::list<std::string> pReceivedItems = { };
+	int pLastReceivedIndex = 0;
 };

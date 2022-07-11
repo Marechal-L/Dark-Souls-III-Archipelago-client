@@ -46,29 +46,17 @@ BOOL CArchipelago::Initialise(std::string URI) {
 			std::string location = ap->get_location_name(item.location);
 
 			//Check if we should ignore this item
-			if (sender == "Server" && location == "Cheat Console") {
-				//Do nothing, let the item go to the player's inventory
-
-			} else {	//Check if the location of this item has already been received
-
-				BOOL ignoreItem = false;
-				for (std::string received : Core->pReceivedLocations) {
-					if (received == location) {
-						//Ignore the item
-						ignoreItem = true;
-						break;
-					}
-				}
-
-				if (ignoreItem) {
-					continue;
-				}
-
-				//Add the item to the list of already received items
-				Core->pReceivedLocations.push_back(location);
+			if (item.index < Core->pLastReceivedIndex) {
+				continue;
 			}
 
-			printf("  #%d: %s (%" PRId64 ") from %s - %s\n", item.index, itemname.c_str(), item.item, sender.c_str(), location.c_str());
+			std::ostringstream stringStream;
+			stringStream << "#" << item.index << ": " << itemname.c_str() << " from " << sender.c_str() << " - " << location.c_str() << std::endl;
+			std::string itemDesc = stringStream.str();
+
+			//Add the item to the list of already received items, only for logging purpose
+			Core->pReceivedItems.push_back(itemDesc);
+			printf(itemDesc.c_str());
 
 			//Determine the item address
 			DWORD address = 0;
@@ -85,7 +73,6 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 			ItemRandomiser->receivedItemsQueue.push_front((DWORD)address);
 		}
-		Core->saveConfigFiles = true;
 		});
 
 	ap->set_data_package_changed_handler([](const json& data) {
