@@ -77,8 +77,8 @@ VOID CGameHook::giveItems() {
 }
 
 BOOL CGameHook::isSoulOfCinderDefeated() {
-	constexpr std::uint8_t mask6{ 0b0100'0000 };
-	return soulOfCinderDefeatedFlagRead != 0 && (int)(soulOfCinderDefeated & mask6) == 64;
+	constexpr std::uint8_t mask7{ 0b1000'0000 };
+	return soulOfCinderDefeatedFlagRead != 0 && (int)(soulOfCinderDefeated & mask7) == 128;
 }
 
 VOID CGameHook::itemGib(DWORD itemId) {
