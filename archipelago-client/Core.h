@@ -32,6 +32,8 @@
 #define HE_NoPlayerChar 9
 #define AP_InitFailed 10
 
+#define VERSION "1.0.0"
+
 
 struct SCore;
 

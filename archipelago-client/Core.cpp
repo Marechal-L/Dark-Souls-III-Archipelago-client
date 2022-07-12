@@ -43,10 +43,10 @@ BOOL CCore::Initialise() {
 	//Setup the client console
 	FILE* fp;
 	AllocConsole();
-	SetConsoleTitleA("Dark Souls III - Item Randomiser Console");
+	SetConsoleTitleA("Dark Souls III - Archipelago Console");
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONIN$", "r", stdin);
-	printf_s("Starting DS3 ...\n");
+	printf_s("Archipelago client v%s \n\n\n", VERSION);
 	
 	ReadConfigFiles();
 
