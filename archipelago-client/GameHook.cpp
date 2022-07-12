@@ -53,17 +53,7 @@ BOOL CGameHook::updateRuntimeValues() {
 	ReadProcessMemory(hProcess, (BYTE*)playTimeAddr, &playTime, sizeof(playTime), &playTimeRead);
 	ReadProcessMemory(hProcess, (BYTE*)soulOfCinderDefeatedFlagAddress, &soulOfCinderDefeated, sizeof(soulOfCinderDefeated), &soulOfCinderDefeatedFlagRead);
 
-}
 
-VOID CGameHook::giveItems() {
-	DWORD processId = GetCurrentProcessId();
-	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
-
-	//Send the next item in the list
-	if (!ItemRandomiser->receivedItemsQueue.empty()) {
-		itemGib(ItemRandomiser->receivedItemsQueue.back());
-	}
-	
 	//Enable the Path of The Dragon Gesture manually when receiving the item
 	if (ItemRandomiser->enablePathOfTheDragon) {
 		ItemRandomiser->enablePathOfTheDragon = false;
@@ -73,6 +63,13 @@ VOID CGameHook::giveItems() {
 
 		char gestureUnlocked = 0x43;
 		WriteProcessMemory(hProcess, (BYTE*)gestureAddr, &gestureUnlocked, sizeof(gestureUnlocked), nullptr);
+	}
+}
+
+VOID CGameHook::giveItems() {
+	//Send the next item in the list
+	if (!ItemRandomiser->receivedItemsQueue.empty()) {
+		itemGib(ItemRandomiser->receivedItemsQueue.back());
 	}
 }
 
