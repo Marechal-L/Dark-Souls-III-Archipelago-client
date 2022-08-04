@@ -22,11 +22,11 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 	ap_sync_queued = false;
 	ap->set_socket_connected_handler([]() {
-		ap->ConnectSlot(Core->pSlotName, "", 1);
 		});
 	ap->set_socket_disconnected_handler([]() {
 		});
-	ap->set_slot_connected_handler([](const json&) {
+	ap->set_slot_connected_handler([](const json& data) {
+		std::cout << data.dump() << std::endl;
 		});
 	ap->set_slot_disconnected_handler([]() {
 		});
@@ -77,6 +77,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 	ap->set_data_package_changed_handler([](const json& data) {
 		ap->save_data_package(DATAPACKAGE_CACHE);
+		ap->ConnectSlot(Core->pSlotName, "", 1, {}, {0,3,3});
 		});
 
 	ap->set_print_handler([](const std::string& msg) {
