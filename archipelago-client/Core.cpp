@@ -1,7 +1,6 @@
 #include "Core.h"
 #include "GameHook.h"
 
-
 CCore* Core;
 CGameHook* GameHook;
 CItemRandomiser* ItemRandomiser;
@@ -142,9 +141,21 @@ VOID CCore::InputCommand() {
 
 		if (line.find("/connect ") == 0) {
 			std::string param = line.substr(9);
-			if (!ArchipelagoInterface->Initialise(param)) {
-				Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
-				int3
+			int spaceIndex = param.find(" ");
+			if (spaceIndex == std::string::npos) {
+				if (!ArchipelagoInterface->Initialise(param)) {
+					Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
+					int3
+				}
+			} else {
+				std::string address = param.substr(0, spaceIndex);
+				std::string slotName = param.substr(spaceIndex + 1);
+				std::cout << address << " - " << slotName << "\n";
+				Core->pSlotName = slotName;
+				if (!ArchipelagoInterface->Initialise(address)) {
+					Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
+					int3
+				}
 			}
 		}
 
