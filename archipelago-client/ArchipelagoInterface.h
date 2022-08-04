@@ -13,4 +13,5 @@ public:
 	VOID say(std::string message);
 	VOID update();
 	VOID gameFinished();
+	VOID sendDeathLink();
 };

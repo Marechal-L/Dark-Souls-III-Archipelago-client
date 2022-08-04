@@ -10,6 +10,7 @@
 
 extern CCore* Core;
 extern CItemRandomiser* ItemRandomiser;
+extern CGameHook* GameHook;
 
 bool ap_sync_queued = false;
 APClient* ap;
@@ -77,7 +78,9 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 	ap->set_data_package_changed_handler([](const json& data) {
 		ap->save_data_package(DATAPACKAGE_CACHE);
-		ap->ConnectSlot(Core->pSlotName, "", 1, {}, {0,3,3});
+		std::list<std::string> tags;
+		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
+		ap->ConnectSlot(Core->pSlotName, "", 1, tags, {0,3,3});
 		});
 
 	ap->set_print_handler([](const std::string& msg) {
@@ -86,6 +89,29 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 	ap->set_print_json_handler([](const std::list<APClient::TextNode>& msg) {
 		printf("%s\n", ap->render_json(msg, APClient::RenderFormat::TEXT).c_str());
+		});
+
+	ap->set_bounced_handler([](const json& cmd) {
+		if (GameHook->dIsDeathLink) {
+			auto tagsIt = cmd.find("tags");
+			auto dataIt = cmd.find("data");
+			if (tagsIt != cmd.end() && tagsIt->is_array()
+				&& std::find(tagsIt->begin(), tagsIt->end(), "DeathLink") != tagsIt->end())
+			{
+				if (dataIt != cmd.end() && dataIt->is_object()) {
+					json data = *dataIt;
+					if (data["source"].get<std::string>() != Core->pSlotName) {
+						printf("Died by the hands of %s: %s\n",
+							data["source"].is_string() ? data["source"].get<std::string>().c_str() : "???",
+							data["cause"].is_string() ? data["cause"].get<std::string>().c_str() : "???");
+						GameHook->deathLinkData = true;
+					}
+				}
+				else {
+					printf("Bad deathlink packet!\n");
+				}
+			}
+		}
 		});
 	
 	return true;
@@ -110,6 +136,18 @@ VOID CArchipelago::update() {
 }
 
 VOID CArchipelago::gameFinished() {
-	printf("Game finished!\n");
 	if (ap) ap->StatusUpdate(APClient::ClientStatus::GOAL);
+}
+
+VOID CArchipelago::sendDeathLink() {
+	if (!ap) return;
+
+	printf("Sending deathlink...\n");
+
+	json data{
+		{"time", ap->get_server_time()},
+		{"cause", "Dark Souls III."},
+		{"source", ap->get_slot()},
+	};
+	ap->Bounce(data, {}, {}, { "DeathLink" });
 }

@@ -17,17 +17,21 @@ public:
 	virtual BOOL updateRuntimeValues();
 	virtual VOID giveItems();
 	virtual BOOL isSoulOfCinderDefeated();
-	int healthPoint, playTime;
+	virtual VOID manageDeathLink();
+	int healthPoint = -1, lastHealthPoint = -1, playTime = -1;
 	char soulOfCinderDefeated;
 	SIZE_T healthPointRead, playTimeRead, soulOfCinderDefeatedFlagRead;
 
 	DWORD dIsAutoEquip;
 	DWORD dLockEquipSlots;
 	DWORD dIsNoWeaponRequirements;
+	DWORD dIsDeathLink;
 	UINT_PTR qLocalPlayer = 0x144740178;
 	UINT_PTR qWorldChrMan = 0x144768E78;
 	UINT_PTR qSprjLuaEvent = 0x14473A9C8;
 	HANDLE hHeap;
+
+	BOOL deathLinkData = false;
 
 private:
 	static BOOL replaceShellCodeAddress(BYTE* shellcode, int shellCodeOffset, LPVOID codeCave, int codeCaveOffset, int length);
@@ -39,6 +43,7 @@ private:
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
 	static VOID LockEquipSlots();
 	static VOID itemGib(DWORD itemId);
+	static VOID killThePlayer();
 
 	
 

@@ -10,6 +10,7 @@ DWORD64 rEquipLock = 0;
 LPVOID itemGibDataCodeCave;
 
 extern CItemRandomiser* ItemRandomiser;
+extern CArchipelago* ArchipelagoInterface;
 
 BOOL CGameHook::initialize() {
 
@@ -36,6 +37,32 @@ BOOL CGameHook::initialize() {
 	return bReturn;
 }
 
+VOID CGameHook::manageDeathLink() {
+
+	
+	if (lastHealthPoint == 0 && healthPoint != 0) {	//The player just respawned
+		deathLinkData = false;
+	} else if (deathLinkData && lastHealthPoint != 0 && healthPoint != 0 ) { //The player received a deathLink
+		killThePlayer();
+	} else if(lastHealthPoint != 0 && healthPoint == 0) { //The player just died, ignore the deathLink if received
+		if (deathLinkData) {
+			deathLinkData = false;
+			return;
+		}
+		ArchipelagoInterface->sendDeathLink();
+	}
+}
+
+VOID CGameHook::killThePlayer() {
+	DWORD processId = GetCurrentProcessId();
+	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
+	std::vector<unsigned int> hpOffsets = { 0x80, 0x1F90, 0x18, 0xD8 };
+	uintptr_t healthPointAddr = FindExecutableAddress(0x4768E78, hpOffsets); //BaseB + HP Offsets
+
+	int newHP = 0;
+	WriteProcessMemory(hProcess, (BYTE*)healthPointAddr, &newHP, sizeof(newHP), nullptr);
+}
+
 BOOL CGameHook::updateRuntimeValues() {
 	DWORD processId = GetCurrentProcessId();
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
@@ -49,10 +76,11 @@ BOOL CGameHook::updateRuntimeValues() {
 	std::vector<unsigned int> soulOfCinderDefeatedFlagOffsets = { 0x00, 0x5F67 };
 	uintptr_t soulOfCinderDefeatedFlagAddress = FindExecutableAddress(0x473BE28, soulOfCinderDefeatedFlagOffsets); //GameFlagData + Sould of Cinder defeated flag Offsets	
 
+	lastHealthPoint = healthPoint;
+
 	ReadProcessMemory(hProcess, (BYTE*)healthPointAddr, &healthPoint, sizeof(healthPoint), &healthPointRead);
 	ReadProcessMemory(hProcess, (BYTE*)playTimeAddr, &playTime, sizeof(playTime), &playTimeRead);
 	ReadProcessMemory(hProcess, (BYTE*)soulOfCinderDefeatedFlagAddress, &soulOfCinderDefeated, sizeof(soulOfCinderDefeated), &soulOfCinderDefeatedFlagRead);
-
 
 	//Enable the Path of The Dragon Gesture manually when receiving the item
 	if (ItemRandomiser->enablePathOfTheDragon) {

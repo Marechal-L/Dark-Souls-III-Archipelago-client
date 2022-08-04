@@ -70,6 +70,8 @@ VOID CCore::Run() {
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
 
+		GameHook->manageDeathLink();
+
 		if (!ItemRandomiser->receivedItemsQueue.empty()) {
 			GameHook->giveItems();
 			pLastReceivedIndex++;
@@ -81,8 +83,6 @@ VOID CCore::Run() {
 			ArchipelagoInterface->gameFinished();
 		}
 	}
-
-	
 
 	SaveConfigFiles();
 
@@ -194,7 +194,7 @@ VOID CCore::ReadConfigFiles() {
 	j.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip);
 	j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots);
 	j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements);
-
+	j.at("options").at("death_link").get_to(GameHook->dIsDeathLink);
 
 	std::string filename = Core->pSeed + ".json";
 	std::ifstream locations(filename);
