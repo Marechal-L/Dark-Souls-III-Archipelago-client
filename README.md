@@ -1,7 +1,6 @@
-# DarkSouls3-Archipelago-client
+# Dark-Souls-III-Archipelago-client
 
-Dark Souls 3 client made for Archipelago multiworld randomizer. See [archipelago.gg](https://archipelago.gg/) 
-**Currently in Public Beta**  
+Dark Souls III client made for Archipelago multiworld randomizer. See [archipelago.gg](https://archipelago.gg/)
 
 ## How to use :  
 - The provided dll requires other dependencies so if you encounter a crash when launching the game,   
@@ -15,7 +14,7 @@ installing the latest Microsoft Visual C++ Redistributable version could fix it 
 	- /connect : Connect to the localhost:38281 server
 
 ## Credits :  
-https://github.com/LukeYui/DS3-Item-Randomiser-OS by LukeYui
+https://github.com/LukeYui/DS3-Item-Randomiser-OS by LukeYui  
 https://github.com/black-sliver/apclientpp by black-sliver
 
 
