@@ -98,10 +98,7 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 
 	sprintf_s(pOutput, "%s -> %s (%i)", pSort, pMessage, dError);
 
-	if (IsDebuggerPresent()) {
-		OutputDebugStringA(pOutput);
-	};
-
+	printf("%s\n", pOutput);
 	
 	if (dIsFatalError) {
 		sprintf_s(pTitle, "[Item Randomiser - Fatal Error]");
@@ -174,12 +171,22 @@ VOID CCore::InputCommand() {
 
 VOID CCore::ReadConfigFiles() {
 	
-	printf("Reading AP.json\n");
+	printf("Reading AP.json ... \n");
 
 	// read the archipelago json file
 	std::ifstream i("AP.json");
+	if( i.fail() ) {
+		Core->Panic("Double check the filename and the file extension", "Can not open the `AP.json` file", AP_MissingFile, 1);
+	}
+
 	json j;
 	i >> j;
+
+	//Mandatory values
+	if (!j.contains("locationsId") || !j.contains("locationsAddress") || !j.contains("locationsTarget") || !j.contains("itemsId") 
+		|| !j.contains("itemsAddress") || !j.contains("base_id") || !j.contains("seed") || !j.contains("slot")) {
+		Core->Panic("One of the mandatory value is missing in the `AP.json` file", "Missing configuration values", AP_MissingValue, 1);
+	}
 
 	j.at("locationsId").get_to(ItemRandomiser->pLocationsId);
 	j.at("locationsAddress").get_to(ItemRandomiser->pLocationsAddress);
@@ -187,14 +194,15 @@ VOID CCore::ReadConfigFiles() {
 	j.at("itemsId").get_to(ItemRandomiser->pItemsId);
 	j.at("itemsAddress").get_to(ItemRandomiser->pItemsAddress);
 	j.at("base_id").get_to(ItemRandomiser->pBaseId);
-
 	j.at("seed").get_to(Core->pSeed);
 	j.at("slot").get_to(Core->pSlotName);
 
-	j.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip);
-	j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots);
-	j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements);
-	j.at("options").at("death_link").get_to(GameHook->dIsDeathLink);
+	if (j.contains("options")) {
+		(j.at("options").contains("auto_equip")) ? (j.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip)) : GameHook->dIsAutoEquip = false;
+		(j.at("options").contains("lock_equip")) ? (j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots)) : GameHook->dLockEquipSlots = false;
+		(j.at("options").contains("no_weapon_requirements")) ? (j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements)) : GameHook->dIsNoWeaponRequirements = false;
+		(j.at("options").contains("death_link")) ? (j.at("options").at("death_link").get_to(GameHook->dIsDeathLink)) : GameHook->dIsDeathLink = false;
+	}
 
 	std::string filename = Core->pSeed + ".json";
 	std::ifstream locations(filename);
@@ -210,6 +218,7 @@ VOID CCore::ReadConfigFiles() {
 	printf("auto-equip enabled : %d\n", GameHook->dIsAutoEquip);
 	printf("lock-equip-slot enabled : %d\n", GameHook->dLockEquipSlots);
 	printf("no-weapon-requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
+	printf("death-link enabled : %d\n", GameHook->dIsDeathLink);
 
 
 };

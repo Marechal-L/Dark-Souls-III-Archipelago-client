@@ -33,6 +33,8 @@
 #define HE_Undefined 8
 #define HE_NoPlayerChar 9
 #define AP_InitFailed 10
+#define AP_MissingFile 11
+#define AP_MissingValue 12
 
 #define VERSION "1.0.0"
 
