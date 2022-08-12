@@ -32,6 +32,12 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	ap->set_slot_disconnected_handler([]() {
 		});
 
+	ap->set_room_info_handler([]() {
+		std::list<std::string> tags;
+		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
+		ap->ConnectSlot(Core->pSlotName, "", 1, tags, { 0,3,3 });
+		});
+
 	ap->set_items_received_handler([](const std::list<APClient::NetworkItem>& items) {
 		
 		if (!ap->is_data_package_valid()) {
@@ -78,9 +84,6 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 	ap->set_data_package_changed_handler([](const json& data) {
 		ap->save_data_package(DATAPACKAGE_CACHE);
-		std::list<std::string> tags;
-		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
-		ap->ConnectSlot(Core->pSlotName, "", 1, tags, {0,3,3});
 		});
 
 	ap->set_print_handler([](const std::string& msg) {
@@ -126,11 +129,9 @@ VOID CArchipelago::say(std::string message) {
 VOID CArchipelago::update() {
 	if (ap) ap->poll();
 
-	if (ap && ap->get_state() == APClient::State::SLOT_CONNECTED) {
-		if (ap && !ItemRandomiser->checkedLocationsList.empty()) {
-			if (ap->LocationChecks(ItemRandomiser->checkedLocationsList)) {
-				ItemRandomiser->checkedLocationsList.clear();
-			}
+	if (ap && !ItemRandomiser->checkedLocationsList.empty()) {
+		if (ap->LocationChecks(ItemRandomiser->checkedLocationsList)) {
+			ItemRandomiser->checkedLocationsList.clear();
 		}
 	}
 }
