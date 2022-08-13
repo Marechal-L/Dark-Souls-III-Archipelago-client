@@ -25,6 +25,8 @@ public:
 	DWORD dIsAutoEquip;
 	DWORD dLockEquipSlots;
 	DWORD dIsNoWeaponRequirements;
+	DWORD dIsNoSpellsRequirements;
+	DWORD dIsNoEquipLoadRequirements;
 	DWORD dIsDeathLink;
 	UINT_PTR qLocalPlayer = 0x144740178;
 	UINT_PTR qWorldChrMan = 0x144768E78;
@@ -42,6 +44,7 @@ private:
 	static uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsigned int> offsets);
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
 	static VOID LockEquipSlots();
+	static VOID RemoveSpellsRequirements();
 	static VOID itemGib(DWORD itemId);
 	static VOID killThePlayer();
 

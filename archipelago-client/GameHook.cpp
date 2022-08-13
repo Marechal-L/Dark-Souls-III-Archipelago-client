@@ -32,6 +32,8 @@ BOOL CGameHook::initialize() {
 	bReturn &= Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
 	if (dIsAutoEquip) { bReturn &= Hook(0x1407BBE92, (DWORD64)&tAutoEquip, &rAutoEquip, 6); }
 	if (dIsNoWeaponRequirements) { bReturn &= Hook(0x140C073B9, (DWORD64)&tNoWeaponRequirements, &rNoWeaponRequirements, 7); }
+	if (dIsNoSpellsRequirements) { RemoveSpellsRequirements(); }
+
 	if (dLockEquipSlots) { LockEquipSlots(); }
 
 	return bReturn;
@@ -228,6 +230,31 @@ VOID CGameHook::LockEquipSlots() {
 
 	if (!VirtualProtect((LPVOID)qEquip, 1, dOldProtect, &dOldProtect)) return;
 	if (!VirtualProtect((LPVOID)qUnequip, 1, dOldProtect, &dOldProtect)) return;
+
+	return;
+}
+
+VOID CGameHook::RemoveSpellsRequirements() {
+
+	DWORD processId = GetCurrentProcessId();
+	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
+
+	std::vector<unsigned int> offsets = { 0x460, 0x68, 0x68, 0x00 };
+	uintptr_t magicAddr = FindExecutableAddress(0x4782838, offsets); //Param + Magic
+	
+	uintptr_t countAddr = magicAddr + 0x0A;
+	int count = 0;
+	ReadProcessMemory(hProcess, (BYTE*)countAddr, &count, sizeof(char) * 2, nullptr);
+
+	for (int i = 0; i < count; i++) {
+		uintptr_t IDOAddr = magicAddr + 0x48 + 0x18 * i;
+		int IDOBuffer;
+		ReadProcessMemory(hProcess, (BYTE*)IDOAddr, &IDOBuffer, sizeof(IDOBuffer), nullptr);
+
+		uintptr_t spellAddr = magicAddr + IDOBuffer + 0x1E;
+		BYTE newValue = 0x00;
+		WriteProcessMemory(hProcess, (BYTE*)spellAddr, &newValue, sizeof(newValue), nullptr);
+	}
 
 	return;
 }

@@ -49,12 +49,8 @@ BOOL CCore::Initialise() {
 	
 	ReadConfigFiles();
 
-	//Inject custom shell codes
-	BOOL initResult = GameHook->initialize();
-	if (!initResult) {
-		Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
-		int3
-	}
+
+	
 
 	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
@@ -62,6 +58,7 @@ BOOL CCore::Initialise() {
 	return true;
 }
 
+bool isInit = false;
 
 VOID CCore::Run() {
 
@@ -69,6 +66,17 @@ VOID CCore::Run() {
 
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
+
+		if (!isInit) {
+			//Inject custom shell codes
+			BOOL initResult = GameHook->initialize();
+			if (!initResult) {
+				Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
+				int3
+			}
+			isInit = true;
+		}
+
 
 		GameHook->manageDeathLink();
 
@@ -202,6 +210,8 @@ VOID CCore::ReadConfigFiles() {
 		(j.at("options").contains("lock_equip")) ? (j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots)) : GameHook->dLockEquipSlots = false;
 		(j.at("options").contains("no_weapon_requirements")) ? (j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements)) : GameHook->dIsNoWeaponRequirements = false;
 		(j.at("options").contains("death_link")) ? (j.at("options").at("death_link").get_to(GameHook->dIsDeathLink)) : GameHook->dIsDeathLink = false;
+		(j.at("options").contains("no_spell_requirements")) ? (j.at("options").at("no_spell_requirements").get_to(GameHook->dIsNoSpellsRequirements)) : GameHook->dIsNoSpellsRequirements = false;
+		(j.at("options").contains("no_equip_load")) ? (j.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
 	}
 
 	std::string filename = Core->pSeed + ".json";
@@ -219,6 +229,8 @@ VOID CCore::ReadConfigFiles() {
 	printf("lock-equip-slot enabled : %d\n", GameHook->dLockEquipSlots);
 	printf("no-weapon-requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
 	printf("death-link enabled : %d\n", GameHook->dIsDeathLink);
+	printf("no-spell-requirements enabled : %d\n", GameHook->dIsNoSpellsRequirements);
+	printf("no-equipload-requirements enabled : %d\n", GameHook->dIsNoEquipLoadRequirements);
 
 
 };
