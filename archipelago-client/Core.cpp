@@ -225,12 +225,12 @@ VOID CCore::ReadConfigFiles() {
 	}
 
 	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
-	printf("auto-equip enabled : %d\n", GameHook->dIsAutoEquip);
-	printf("lock-equip-slot enabled : %d\n", GameHook->dLockEquipSlots);
-	printf("no-weapon-requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
-	printf("death-link enabled : %d\n", GameHook->dIsDeathLink);
-	printf("no-spell-requirements enabled : %d\n", GameHook->dIsNoSpellsRequirements);
-	printf("no-equipload-requirements enabled : %d\n", GameHook->dIsNoEquipLoadRequirements);
+	printf("auto_equip enabled : %d\n", GameHook->dIsAutoEquip);
+	printf("lock_equip enabled : %d\n", GameHook->dLockEquipSlots);
+	printf("no_weapon_requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
+	printf("death_link enabled : %d\n", GameHook->dIsDeathLink);
+	printf("no_spell_requirements enabled : %d\n", GameHook->dIsNoSpellsRequirements);
+	printf("no_equip_load enabled : %d\n", GameHook->dIsNoEquipLoadRequirements);
 
 
 };

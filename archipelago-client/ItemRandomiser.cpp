@@ -34,10 +34,6 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
-#ifdef DEBUG
-		printf("itemId : %d\n", dItemID);
-#endif // DEBUG
-
 		//Make some checks about the item picked by the player
 		int serverLocationIndex = -1;
 		int locationTargetItem = 0;

@@ -45,6 +45,7 @@ private:
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
 	static VOID LockEquipSlots();
 	static VOID RemoveSpellsRequirements();
+	static VOID RemoveEquipLoad();
 	static VOID itemGib(DWORD itemId);
 	static VOID killThePlayer();
 
