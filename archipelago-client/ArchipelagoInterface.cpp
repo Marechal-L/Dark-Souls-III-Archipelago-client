@@ -141,7 +141,7 @@ VOID CArchipelago::gameFinished() {
 }
 
 VOID CArchipelago::sendDeathLink() {
-	if (!ap) return;
+	if (!ap || !GameHook->dIsDeathLink) return;
 
 	printf("Sending deathlink...\n");
 
