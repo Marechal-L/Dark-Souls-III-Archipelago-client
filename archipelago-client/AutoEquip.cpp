@@ -70,7 +70,7 @@ BOOL CAutoEquip::SortItem(DWORD dItemID, SEquipBuffer* E) {
 	switch (dItemType) {
 		case(ItemType_Weapon): {
 			if ((dItemID >> 0x10) == 6) return false; //Don't equip ammo
-			if ((dItemID & 0xFF000000) << 4 != 0x10000000) dEquipSlot = 1; //If these conditions are met, it's a shield.
+			if ((dItemID & 0xFF000000) << 4 != 0x10000000) dEquipSlot = 0; //If these conditions are met, it's a shield.
 			break;
 		};
 		case(ItemType_Protector): {
@@ -78,9 +78,11 @@ BOOL CAutoEquip::SortItem(DWORD dItemID, SEquipBuffer* E) {
 			else if (FindEquipType(dItemID, &pBodyList[0])) dEquipSlot = 0x0D;
 			else if (FindEquipType(dItemID, &pHandsList[0])) dEquipSlot = 0x0E;
 			else if (FindEquipType(dItemID, &pLegsList[0])) dEquipSlot = 0x0F;
+			else return false;
 			break;
 		};
 		case(ItemType_Accessory): {
+			if ((dItemID & 0xFFFFFF00) == 0x20002700) { return false; } //It's a covenant item
 			if (dRingSlotSelect >= 0x15) dRingSlotSelect = 0x11;
 			dEquipSlot = dRingSlotSelect;
 			dRingSlotSelect++;
@@ -338,7 +340,6 @@ extern DWORD pBodyList[105]{
 	0x11D909A8,
 	0x11DA9048,
 	0x11F78E28,
-	0x11DA9048,
 	0x129024A8,
 	0x129F66E8,
 	0x12A70808,
@@ -412,6 +413,7 @@ extern DWORD pBodyList[105]{
 	0x14CC5908,
 	0x14DB9B48,
 	0x14EADD88,
+	0x12625de8,
 	0x00000000,
 
 };		  //All in-game chestpieces
