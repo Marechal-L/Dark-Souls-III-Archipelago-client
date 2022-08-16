@@ -45,7 +45,8 @@ BOOL CCore::Initialise() {
 	SetConsoleTitleA("Dark Souls III - Archipelago Console");
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONIN$", "r", stdin);
-	printf_s("Archipelago client v%s \n\n\n", VERSION);
+	printf_s("Archipelago client v%s \n", VERSION);
+	printf_s("A new version may or may not be available, please check this link for updates : %s \n\n\n", "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases");
 	
 	ReadConfigFiles();
 

@@ -35,7 +35,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	ap->set_room_info_handler([]() {
 		std::list<std::string> tags;
 		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
-		ap->ConnectSlot(Core->pSlotName, "", 1, tags, { 0,3,3 });
+		ap->ConnectSlot(Core->pSlotName, "", 1, tags, { 0,3,4 });
 		});
 
 	ap->set_items_received_handler([](const std::list<APClient::NetworkItem>& items) {
