@@ -110,10 +110,10 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 	printf("%s\n", pOutput);
 	
 	if (dIsFatalError) {
-		sprintf_s(pTitle, "[Item Randomiser - Fatal Error]");
+		sprintf_s(pTitle, "[Archipelago client - Fatal Error]");
 	}
 	else {
-		sprintf_s(pTitle, "[Item Randomiser - Error]");
+		sprintf_s(pTitle, "[Archipelago client - Error]");
 	};
 
 	MessageBoxA(NULL, pOutput, pTitle, MB_ICONERROR);
@@ -194,7 +194,7 @@ VOID CCore::ReadConfigFiles() {
 	//Mandatory values
 	if (!j.contains("locationsId") || !j.contains("locationsAddress") || !j.contains("locationsTarget") || !j.contains("itemsId") 
 		|| !j.contains("itemsAddress") || !j.contains("base_id") || !j.contains("seed") || !j.contains("slot")) {
-		Core->Panic("One of the mandatory value is missing in the `AP.json` file", "Missing configuration values", AP_MissingValue, 1);
+		Core->Panic("Please check the following values : [locationsId], [locationsAddress], [locationsTarget], [itemsId], [itemsAddress], [base_id], [seed] and [slot]", "One of the mandatory values is missing in the `AP.json` file", AP_MissingValue, 1);
 	}
 
 	j.at("locationsId").get_to(ItemRandomiser->pLocationsId);

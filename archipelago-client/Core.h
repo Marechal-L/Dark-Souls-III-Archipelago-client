@@ -3,8 +3,6 @@
 #define _WEBSOCKETPP_CPP11_INTERNAL_
 #define _CRT_SECURE_NO_WARNINGS
 
-#define DEBUG
-
 #include "subprojects/apclientpp/apclient.hpp"
 #include <windows.h>
 #include <Windows.h>
