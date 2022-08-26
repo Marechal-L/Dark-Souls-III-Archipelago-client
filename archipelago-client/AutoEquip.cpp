@@ -67,10 +67,14 @@ BOOL CAutoEquip::SortItem(DWORD dItemID, SEquipBuffer* E) {
 
 	dItemType = (dItemID >> 0x1C);
 
+#ifdef DEBUG
+	std::cout << "dItemID : " << dItemID << "\n";
+#endif
+
 	switch (dItemType) {
 		case(ItemType_Weapon): {
 			if ((dItemID >> 0x10) == 6) return false; //Don't equip ammo
-			if ((dItemID & 0xFF000000) << 4 != 0x10000000) dEquipSlot = 0; //If these conditions are met, it's a shield.
+			if ((dItemID & 0xFF000000) << 4 != 0x10000000) dEquipSlot = 1;  //It's a weapon
 			break;
 		};
 		case(ItemType_Protector): {
