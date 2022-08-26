@@ -2,18 +2,29 @@
 
 Dark Souls III client made for Archipelago multiworld randomizer. See [archipelago.gg](https://archipelago.gg/)
 
-## How to use :  
-- The provided dll requires other dependencies so if you encounter a crash when launching the game,   
-installing the latest Microsoft Visual C++ Redistributable version could fix it : https://aka.ms/vs/17/release/vc_redist.x64.exe  
-- Setup documentation : https://github.com/Marechal-L/Archipelago/blob/add_dark_souls_III/worlds/dark_souls_3/docs/setup_en.md  
-- Rename your provided AP-{ROOM_ID}.json file to AP.json
-- All client commands start with "/" and archipelago commands start with "!" :  
+## How to install
+- Download the lastest version available [here](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases).
+- Copy the two following files into your game folder :
+	- dinput8.dll
+	- DarkSoulsIII.exe
+- Generate a game using Archipelago.
+- Download the file from the room.
+- Rename it into "AP.json".
+- Copy the "AP.json" file into your game folder.
+
+## Commands
+- All client commands start with "/" and archipelago commands start with "!" :
 	- /help : Prints this help message.
 	- !help : to retrieve all archipelago commands
 	- /connect {SERVER_IP}:{SERVER_PORT} : To connect to a server
-	- /connect : Connect to the localhost:38281 server
+	- /connect : Connect to the localhost:38281 server	
+	
+## Troubleshoots
+- The provided dll requires other dependencies so if you encounter a crash when launching the game,
+installing the latest Microsoft Visual C++ Redistributable version could fix it : https://aka.ms/vs/17/release/vc_redist.x64.exe.
+- The Windows console tends to freeze preventing you from sending or receiving any items. You must Alt+Tab, click on the console and press enter to refresh it.
 
-## Credits :  
+## Credits
 https://github.com/LukeYui/DS3-Item-Randomiser-OS by LukeYui  
 https://github.com/black-sliver/apclientpp by black-sliver
 
