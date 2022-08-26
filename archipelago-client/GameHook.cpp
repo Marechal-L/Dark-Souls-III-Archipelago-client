@@ -12,6 +12,14 @@ LPVOID itemGibDataCodeCave;
 extern CItemRandomiser* ItemRandomiser;
 extern CArchipelago* ArchipelagoInterface;
 
+/*
+* Check if a basic hook is working on this version of the game  
+*/
+BOOL CGameHook::preInitialize() {
+	if (MH_Initialize() != MH_OK) return false;
+	return Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+}
+
 BOOL CGameHook::initialize() {
 
 	BOOL bReturn = true;
@@ -27,9 +35,6 @@ BOOL CGameHook::initialize() {
 	//Inject ItemGibShellcode
 	LPVOID itemGibCodeCave = InjectShellCode((LPVOID)0x13ffe0000, ItemGibShellcode, 93);
 
-	if (MH_Initialize() != MH_OK) return false;
-
-	bReturn &= Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
 	if (dIsAutoEquip) { bReturn &= Hook(0x1407BBE92, (DWORD64)&tAutoEquip, &rAutoEquip, 6); }
 	if (dIsNoWeaponRequirements) { bReturn &= Hook(0x140C073B9, (DWORD64)&tNoWeaponRequirements, &rNoWeaponRequirements, 7); }
 	if (dIsNoSpellsRequirements) { RemoveSpellsRequirements(); }

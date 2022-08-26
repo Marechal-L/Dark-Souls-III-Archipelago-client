@@ -51,6 +51,9 @@ BOOL CCore::Initialise() {
 	ReadConfigFiles();
 
 
+	if (!GameHook->preInitialize()) {
+		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
+	}
 	
 
 	//Start command prompt
@@ -105,9 +108,9 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 	char pOutput[MAX_PATH];
 	char pTitle[MAX_PATH];
 
-	sprintf_s(pOutput, "%s -> %s (%i)", pSort, pMessage, dError);
+	sprintf_s(pOutput, "\n%s -> %s (%i)\n", pSort, pMessage, dError);
 
-	printf("%s\n", pOutput);
+	printf("%s", pOutput);
 	
 	if (dIsFatalError) {
 		sprintf_s(pTitle, "[Archipelago client - Fatal Error]");

@@ -13,6 +13,7 @@ typedef VOID fEquipItem(DWORD dSlot, SEquipBuffer* E);
 
 class CGameHook {
 public:
+	virtual BOOL preInitialize();
 	virtual BOOL initialize();
 	virtual BOOL updateRuntimeValues();
 	virtual VOID giveItems();
