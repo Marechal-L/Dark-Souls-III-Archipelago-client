@@ -47,9 +47,6 @@ BOOL CCore::Initialise() {
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Archipelago client v%s \n", VERSION);
 	printf_s("A new version may or may not be available, please check this link for updates : %s \n\n\n", "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases");
-	
-	ReadConfigFiles();
-
 
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
@@ -71,7 +68,9 @@ VOID CCore::Run() {
 	GameHook->updateRuntimeValues();
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
 
-		if (!isInit) {
+		if (!isInit && ArchipelagoInterface->isConnected()) {
+			ReadConfigFiles();
+
 			//Inject custom shell codes
 			BOOL initResult = GameHook->initialize();
 			if (!initResult) {
@@ -182,61 +181,42 @@ VOID CCore::InputCommand() {
 };
 
 VOID CCore::ReadConfigFiles() {
-	
-	printf("Reading AP.json ... \n");
 
-	// read the archipelago json file
-	std::ifstream i("AP.json");
-	if( i.fail() ) {
-		Core->Panic("Double check the filename and the file extension", "Can not open the `AP.json` file", AP_MissingFile, 1);
-	}
-
-	json j;
-	i >> j;
-
-	//Mandatory values
-	if (!j.contains("locationsId") || !j.contains("locationsAddress") || !j.contains("locationsTarget") || !j.contains("itemsId") 
-		|| !j.contains("itemsAddress") || !j.contains("base_id") || !j.contains("seed") || !j.contains("slot")) {
-		Core->Panic("Please check the following values : [locationsId], [locationsAddress], [locationsTarget], [itemsId], [itemsAddress], [base_id], [seed] and [slot]", "One of the mandatory values is missing in the `AP.json` file", AP_MissingValue, 1);
-	}
-
-	j.at("locationsId").get_to(ItemRandomiser->pLocationsId);
-	j.at("locationsAddress").get_to(ItemRandomiser->pLocationsAddress);
-	j.at("locationsTarget").get_to(ItemRandomiser->pLocationsTarget);
-	j.at("itemsId").get_to(ItemRandomiser->pItemsId);
-	j.at("itemsAddress").get_to(ItemRandomiser->pItemsAddress);
-	j.at("base_id").get_to(ItemRandomiser->pBaseId);
-	j.at("seed").get_to(Core->pSeed);
-	j.at("slot").get_to(Core->pSlotName);
-
-	if (j.contains("options")) {
-		(j.at("options").contains("auto_equip")) ? (j.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip)) : GameHook->dIsAutoEquip = false;
-		(j.at("options").contains("lock_equip")) ? (j.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots)) : GameHook->dLockEquipSlots = false;
-		(j.at("options").contains("no_weapon_requirements")) ? (j.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements)) : GameHook->dIsNoWeaponRequirements = false;
-		(j.at("options").contains("death_link")) ? (j.at("options").at("death_link").get_to(GameHook->dIsDeathLink)) : GameHook->dIsDeathLink = false;
-		(j.at("options").contains("no_spell_requirements")) ? (j.at("options").at("no_spell_requirements").get_to(GameHook->dIsNoSpellsRequirements)) : GameHook->dIsNoSpellsRequirements = false;
-		(j.at("options").contains("no_equip_load")) ? (j.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
-	}
-
-	std::string filename = Core->pSeed + ".json";
+	std::string filename = Core->pSeed + "_" + Core->pSlotName + ".json";
 	std::ifstream locations(filename);
 
 	if (locations) {
+
+		printf("Reading %s ... \n", filename.c_str());
+
+		fseek(locations, 0L, SEEK_END);
+		int sz = ftell(fp);
+
+
 		json k;
 		locations >> k;
 		k.at("received_locations").get_to(pReceivedItems);
 		k.at("last_received_index").get_to(pLastReceivedIndex);
+
+
+		std::map<DWORD, int>::iterator it;
+		for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
+			char buf[20];
+			sprintf(buf, "0x%x", it->first);
+			k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+		}
+
 	}
 
-	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
+
+	/*
 	printf("auto_equip enabled : %d\n", GameHook->dIsAutoEquip);
 	printf("lock_equip enabled : %d\n", GameHook->dLockEquipSlots);
 	printf("no_weapon_requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
 	printf("death_link enabled : %d\n", GameHook->dIsDeathLink);
 	printf("no_spell_requirements enabled : %d\n", GameHook->dIsNoSpellsRequirements);
 	printf("no_equip_load enabled : %d\n", GameHook->dIsNoEquipLoadRequirements);
-
-
+	*/
 };
 
 VOID CCore::SaveConfigFiles() {

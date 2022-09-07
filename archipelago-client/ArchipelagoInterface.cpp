@@ -27,7 +27,36 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	ap->set_socket_disconnected_handler([]() {
 		});
 	ap->set_slot_connected_handler([](const json& data) {
-		//std::cout << data.dump() << std::endl;				//The slot_data feature is not ready yet
+		
+		printf("Reading slot data ... \n");
+
+		// read the archipelago slot data
+
+		//Mandatory values
+		if (!data.contains("locationsId") || !data.contains("locationsAddress") || !data.contains("locationsTarget") || !data.contains("itemsId")
+			|| !data.contains("itemsAddress") || !data.contains("base_id") || !data.contains("seed") || !data.contains("slot")) {
+			Core->Panic("Please check the following values : [locationsId], [locationsAddress], [locationsTarget], [itemsId], [itemsAddress], [base_id], [seed] and [slot]", "One of the mandatory values is missing in the slot data", AP_MissingValue, 1);
+		}
+
+		data.at("locationsId").get_to(ItemRandomiser->pLocationsId);
+		data.at("locationsAddress").get_to(ItemRandomiser->pLocationsAddress);
+		data.at("locationsTarget").get_to(ItemRandomiser->pLocationsTarget);
+		data.at("itemsId").get_to(ItemRandomiser->pItemsId);
+		data.at("itemsAddress").get_to(ItemRandomiser->pItemsAddress);
+		data.at("base_id").get_to(ItemRandomiser->pBaseId);
+		data.at("seed").get_to(Core->pSeed);
+		data.at("slot").get_to(Core->pSlotName);
+
+		if (data.contains("options")) {
+			(data.at("options").contains("auto_equip")) ? (data.at("options").at("auto_equip").get_to(GameHook->dIsAutoEquip)) : GameHook->dIsAutoEquip = false;
+			(data.at("options").contains("lock_equip")) ? (data.at("options").at("lock_equip").get_to(GameHook->dLockEquipSlots)) : GameHook->dLockEquipSlots = false;
+			(data.at("options").contains("no_weapon_requirements")) ? (data.at("options").at("no_weapon_requirements").get_to(GameHook->dIsNoWeaponRequirements)) : GameHook->dIsNoWeaponRequirements = false;
+			(data.at("options").contains("death_link")) ? (data.at("options").at("death_link").get_to(GameHook->dIsDeathLink)) : GameHook->dIsDeathLink = false;
+			(data.at("options").contains("no_spell_requirements")) ? (data.at("options").at("no_spell_requirements").get_to(GameHook->dIsNoSpellsRequirements)) : GameHook->dIsNoSpellsRequirements = false;
+			(data.at("options").contains("no_equip_load")) ? (data.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
+		}
+
+
 		});
 	ap->set_slot_disconnected_handler([]() {
 		});
@@ -124,6 +153,11 @@ VOID CArchipelago::say(std::string message) {
 	if (ap && ap->get_state() == APClient::State::SLOT_CONNECTED) {
 		ap->Say(message);
 	}
+}
+
+
+BOOLEAN CArchipelago::isConnected() {
+	return ap && ap->get_state() == APClient::State::SLOT_CONNECTED;
 }
 
 VOID CArchipelago::update() {
