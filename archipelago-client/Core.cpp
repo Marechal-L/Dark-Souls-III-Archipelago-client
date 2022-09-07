@@ -249,11 +249,23 @@ VOID CCore::SaveConfigFiles() {
 	std::string filename = Core->pSeed + ".json";
 	std::ofstream outfile(filename);
 
+	
+
+	printf("Writing %s ... \n", filename.c_str());
+
 	json j;
-	j["received_locations"] = pReceivedItems;
 	j["last_received_index"] = pLastReceivedIndex;
+	
+	std::map<DWORD, int>::iterator it;
+	for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
+		char buf[20];
+		sprintf(buf, "0x%x", it->first);
+		j["progressive_locations"][buf] = it->second;
+	}
 
 	outfile << std::setw(4) << j << std::endl;
+
+	outfile.close();
 
 }
 

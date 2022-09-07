@@ -103,11 +103,16 @@ public:
 	int pBaseId = 0;
 	std::deque<DWORD> receivedItemsQueue = { };
 	std::list<int64_t> checkedLocationsList = { };
+	std::map<DWORD, int> progressiveLocations{
+		{ 0x400003E8, -1 }, //Titanite Shard
+		{ 0x40000124, -1 }, //Firebomb
+	};
 	bool enablePathOfTheDragon;
 
 private:
 	int isARandomizedLocation(DWORD dItemID);
 	BOOL isReceivedFromServer(DWORD dItemID);
+	BOOL isProgressiveLocation(DWORD dItemID);
 };
 
 class CAutoEquip {

@@ -42,20 +42,24 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		if (isReceivedFromServer(dItemID)) {
 			receivedItemsQueue.pop_back();
 			//Nothing to do, just let the item go to the player's inventory
-		} else if ((serverLocationIndex = isARandomizedLocation(dItemID)) != -1) { //Check if the item is a randomized location
+		}
+		else if ((serverLocationIndex = isARandomizedLocation(dItemID)) != -1) { //Check if the item is a randomized location
 			//From here, the item is considered as a location!	
 			//Check if the location contains a item for the local player
-			
+
 			if ((locationTargetItem = pLocationsTarget[serverLocationIndex]) != 0) {
 				dItemID = locationTargetItem;
-			} else {
+				Core->saveConfigFiles = true;
+			}
+			else {
 				//The item is for another player, give a Prism shard
 				dItemID = 0x40000172;
 			}
 
 			checkedLocationsList.push_front(pLocationsId[serverLocationIndex]);
 
-		} else { 
+		}
+		else {
 			//Nothing to do, this is a vanilla item so we will let it go to the player's inventory	
 		}
 
@@ -73,7 +77,12 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 int CItemRandomiser::isARandomizedLocation(DWORD dItemID) {
 	for (int i = 0; i < pLocationsAddress.size(); ++i) {
 		if (dItemID == pLocationsAddress[i]) {
-			return i;
+			if (isProgressiveLocation(dItemID)) {
+				if (i > progressiveLocations[dItemID]) {
+					progressiveLocations[dItemID] = i;
+					return i;
+				}
+			}else { return i; }
 		}
 	}
 	return -1;
@@ -84,6 +93,15 @@ BOOL CItemRandomiser::isReceivedFromServer(DWORD dItemID) {
 		if (dItemID == item) {
 			return true;
 		}
+	}
+	return false;
+}
+
+BOOL CItemRandomiser::isProgressiveLocation(DWORD dItemID) {
+	std::map<DWORD, int>::iterator it;
+	for (it = progressiveLocations.begin(); it != progressiveLocations.end(); it++) {
+		if (dItemID == it->first)
+			return true;
 	}
 	return false;
 }

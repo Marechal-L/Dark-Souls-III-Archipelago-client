@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <vector>
+#include <map>
 #include <deque>
 #include <string>
 #include <fstream>
