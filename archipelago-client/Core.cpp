@@ -146,6 +146,12 @@ VOID CCore::InputCommand() {
 			std::cout << "/itemGib executed with " << param << "\n";
 			ItemRandomiser->receivedItemsQueue.push_front(std::stoi(param));
 		}
+
+		if (line.find("/save") == 0) {
+			std::cout << "/save\n";
+			Core->saveConfigFiles = true;
+		}
+			
 #endif
 
 		if (line.find("/connect ") == 0) {
@@ -218,25 +224,27 @@ VOID CCore::ReadConfigFiles() {
 		(j.at("options").contains("no_equip_load")) ? (j.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
 	}
 
-	std::string filename = Core->pSeed + ".json";
-	std::ifstream locations(filename);
+	std::string outputFolder = "archipelago";
+	std::string filename = Core->pSeed + "_" + Core->pSlotName + ".json";
 
-	if (locations) {
-		json k;
-		locations >> k;
-		k.at("received_locations").get_to(pReceivedItems);
-		k.at("last_received_index").get_to(pLastReceivedIndex);
+	//Check in archipelago folder
+	std::ifstream gameFile(outputFolder+"\\"+filename);
+	if (!gameFile.good()) {
+		//Check outside the folder
+		std::ifstream gameFile(filename);
+		if (!gameFile.good()) {
+			
+			//Missing session file, that's probably a new game
+			return;
+		}
 	}
 
-	printf("Number of locations : %d\n", ItemRandomiser->pLocationsId.size());
-	printf("auto_equip enabled : %d\n", GameHook->dIsAutoEquip);
-	printf("lock_equip enabled : %d\n", GameHook->dLockEquipSlots);
-	printf("no_weapon_requirements enabled : %d\n", GameHook->dIsNoWeaponRequirements);
-	printf("death_link enabled : %d\n", GameHook->dIsDeathLink);
-	printf("no_spell_requirements enabled : %d\n", GameHook->dIsNoSpellsRequirements);
-	printf("no_equip_load enabled : %d\n", GameHook->dIsNoEquipLoadRequirements);
-
-
+	//Read the game file
+	json k;
+	gameFile >> k;
+	k.at("received_locations").get_to(pReceivedItems);
+	k.at("last_received_index").get_to(pLastReceivedIndex);
+	gameFile.close();
 };
 
 VOID CCore::SaveConfigFiles() {
@@ -246,15 +254,21 @@ VOID CCore::SaveConfigFiles() {
 
 	saveConfigFiles = false;
 
-	std::string filename = Core->pSeed + ".json";
-	std::ofstream outfile(filename);
+	
+	std::string outputFolder = "archipelago";
+	std::string filename = Core->pSeed + "_" + Core->pSlotName + ".json";
 
 	json j;
 	j["received_locations"] = pReceivedItems;
 	j["last_received_index"] = pLastReceivedIndex;
 
-	outfile << std::setw(4) << j << std::endl;
-
+	if (CreateDirectory(outputFolder.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+		std::ofstream outfile(outputFolder + "\\" +filename);
+		outfile << std::setw(4) << j << std::endl;
+	} else {
+		std::ofstream outfile(filename);
+		outfile << std::setw(4) << j << std::endl;
+	}
 }
 
 
