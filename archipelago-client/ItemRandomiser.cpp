@@ -47,6 +47,9 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 			//From here, the item is considered as a location!	
 			//Check if the location contains a item for the local player
 
+			//Override the quantity
+			dItemQuantity = 1;
+
 			if ((locationTargetItem = pLocationsTarget[serverLocationIndex]) != 0) {
 				dItemID = locationTargetItem;
 				Core->saveConfigFiles = true;

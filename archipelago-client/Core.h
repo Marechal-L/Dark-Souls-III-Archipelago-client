@@ -49,6 +49,7 @@ public:
 	virtual VOID Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD dIsFatalError);
 	virtual VOID ReadConfigFiles();
 	virtual VOID SaveConfigFiles();
+	virtual VOID CleanReceivedItemsList();
 
 	std::string pSlotName;
 	std::string pSeed;

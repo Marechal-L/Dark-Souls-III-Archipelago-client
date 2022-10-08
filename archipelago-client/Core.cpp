@@ -70,6 +70,7 @@ VOID CCore::Run() {
 
 		if (!isInit && ArchipelagoInterface->isConnected()) {
 			ReadConfigFiles();
+			CleanReceivedItemsList();
 
 			//Inject custom shell codes
 			BOOL initResult = GameHook->initialize();
@@ -99,6 +100,19 @@ VOID CCore::Run() {
 
 	return;
 };
+
+/*
+* Permits to remove all received item indexes lower than pLastReceivedIndex from the list.
+* It has be to performed after the first connection because we now read the pLastReceivedIndex from the slot_data.
+*/
+VOID CCore::CleanReceivedItemsList() {
+	if (!ItemRandomiser->receivedItemsQueue.empty()) {
+
+		for (int i = 0; i < pLastReceivedIndex; i++) {
+			ItemRandomiser->receivedItemsQueue.pop_back();
+		}
+	}
+}
 
 
 
@@ -208,11 +222,10 @@ VOID CCore::ReadConfigFiles() {
 	//Read the game file
 	json k;
 	gameFile >> k;
-	k.at("received_locations").get_to(pReceivedItems);
 	k.at("last_received_index").get_to(pLastReceivedIndex);
 	std::map<DWORD, int>::iterator it;
 	for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
-		char buf[20];
+		char buf[10];
 		sprintf(buf, "0x%x", it->first);
 		k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
 	}

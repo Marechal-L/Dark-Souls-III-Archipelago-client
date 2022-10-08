@@ -105,7 +105,17 @@ public:
 	std::list<int64_t> checkedLocationsList = { };
 	std::map<DWORD, int> progressiveLocations{
 		{ 0x400003E8, -1 }, //Titanite Shard
+		{ 0x400003E9, -1 }, //Large Titanite Shard
+		{ 0x400003EA, -1 }, //Titanite Chunk
+		{ 0x400003EB, -1 }, //Titanite Slab
+		{ 0x4000085D, -1 }, //Estus Shard
+		{ 0x4000085F, -1 }, //Undead Bone Shard
 		{ 0x40000124, -1 }, //Firebomb
+		{ 0x40000136, -1 }, //Throwing Knife
+		{ 0x40000191, -1 }, //Soul of a Deserted Corpse
+		{ 0x40000192, -1 }, //Large Soul of a Deserted Corpse
+		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
+		{ 0x40000194, -1 } //Large Soul of an Unknown Traveler
 	};
 	bool enablePathOfTheDragon;
 
