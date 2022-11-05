@@ -55,8 +55,7 @@ BOOL CCore::Initialise() {
 	}
 
 	if (CheckOldApFile()) {
-		Core->Panic("The AP.json file is not supported anymore, please remove/rename it or rollback to the version 1.2 to use it", "AP.json file detected", FE_InitFailed, 1);
-		return false;
+		printf_s("The AP.json file is not supported in this version, make sure to finish your previous seed on version 1.2 or use this version on the new Archipelago server\n\n");
 	}
 
 	//Start command prompt
