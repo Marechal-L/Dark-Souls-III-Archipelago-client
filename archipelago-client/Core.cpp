@@ -51,12 +51,25 @@ BOOL CCore::Initialise() {
 
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
+		return false;
+	}
+
+	if (CheckOldApFile()) {
+		Core->Panic("The AP.json file is not supported anymore, please remove/rename it or rollback to the version 1.2 to use it", "AP.json file detected", FE_InitFailed, 1);
+		return false;
 	}
 
 	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
 
 	return true;
+}
+
+BOOL CCore::CheckOldApFile() {
+
+	// read the archipelago json file
+	std::ifstream i("AP.json");
+	return !i.fail();
 }
 
 bool isInit = false;

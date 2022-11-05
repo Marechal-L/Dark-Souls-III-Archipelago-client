@@ -50,6 +50,7 @@ public:
 	virtual VOID ReadConfigFiles();
 	virtual VOID SaveConfigFiles();
 	virtual VOID CleanReceivedItemsList();
+	virtual BOOL CheckOldApFile();
 
 	std::string pSlotName;
 	std::string pSeed;
