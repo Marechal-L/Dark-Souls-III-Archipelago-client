@@ -17,6 +17,7 @@ public:
 	virtual BOOL initialize();
 	virtual BOOL updateRuntimeValues();
 	virtual VOID giveItems();
+	virtual VOID itemGib(DWORD itemId);
 	virtual BOOL isSoulOfCinderDefeated();
 	virtual VOID manageDeathLink();
 	int healthPoint = -1, lastHealthPoint = -1, playTime = -1;
@@ -47,7 +48,6 @@ private:
 	static VOID LockEquipSlots();
 	static VOID RemoveSpellsRequirements();
 	static VOID RemoveEquipLoad();
-	static VOID itemGib(DWORD itemId);
 	static VOID killThePlayer();
 
 	

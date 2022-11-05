@@ -47,11 +47,11 @@ BOOL CCore::Initialise() {
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Archipelago client v%s \n", VERSION);
 	printf_s("A new version may or may not be available, please check this link for updates : %s \n\n\n", "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases");
+	printf_s("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}' to connect to the room\n\n");
 
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
 	}
-	
 
 	//Start command prompt
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Core->InputCommand, NULL, NULL, NULL);
@@ -87,7 +87,6 @@ VOID CCore::Run() {
 		if (!ItemRandomiser->receivedItemsQueue.empty()) {
 			GameHook->giveItems();
 			pLastReceivedIndex++;
-			saveConfigFiles = true;
 		}
 
 		if (GameHook->isSoulOfCinderDefeated() && sendGoalStatus) {
@@ -149,14 +148,19 @@ VOID CCore::InputCommand() {
 			printf("List of available commands : \n");
 			printf("/help : Prints this help message.\n");
 			printf("!help : Prints the help message related to Archipelago.\n");
-			printf("/connect {SERVER_IP}:{SERVER_PORT} : Connect to the specified server.\n");
-			printf("/connect : Connect to the localhost:38281 server.\n");
+			printf("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} : Connect to the specified server.\n");
 		}
 
 #ifdef DEBUG
 		if (line.find("/itemGib ") == 0) {
 			std::string param = line.substr(9);
 			std::cout << "/itemGib executed with " << param << "\n";
+			GameHook->itemGib(std::stoi(param));
+		}
+
+		if (line.find("/give ") == 0) {
+			std::string param = line.substr(6);
+			std::cout << "/give executed with " << param << "\n";
 			ItemRandomiser->receivedItemsQueue.push_front(std::stoi(param));
 		}
 
@@ -171,10 +175,7 @@ VOID CCore::InputCommand() {
 			std::string param = line.substr(9);
 			int spaceIndex = param.find(" ");
 			if (spaceIndex == std::string::npos) {
-				if (!ArchipelagoInterface->Initialise(param)) {
-					Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
-					int3
-				}
+				printf("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}' \n");
 			} else {
 				std::string address = param.substr(0, spaceIndex);
 				std::string slotName = param.substr(spaceIndex + 1);
@@ -185,13 +186,7 @@ VOID CCore::InputCommand() {
 					int3
 				}
 			}
-		}
-
-		if (line == "/connect") {
-			if (!ArchipelagoInterface->Initialise("localhost:38281")) {
-				Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
-				int3
-			}
+			
 		}
 
 		if (line.find("!") == 0) {
@@ -217,7 +212,9 @@ VOID CCore::ReadConfigFiles() {
 		}
 	}
 
+#if DEBUG
 	printf("Reading %s ... \n", filename.c_str());
+#endif
 
 	//Read the game file
 	json k;
@@ -245,8 +242,9 @@ VOID CCore::SaveConfigFiles() {
 	std::string filename = Core->pSeed + "_" + Core->pSlotName + ".json";
 
 	
-
+#if DEBUG
 	printf("Writing %s ... \n", filename.c_str());
+#endif
 
 	json j;
 	j["last_received_index"] = pLastReceivedIndex;

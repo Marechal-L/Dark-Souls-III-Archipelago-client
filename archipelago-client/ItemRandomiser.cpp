@@ -34,6 +34,10 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
+#if DEBUG
+		printf("IN itemID : %d\n", dItemID);
+#endif
+
 		//Make some checks about the item picked by the player
 		int serverLocationIndex = -1;
 		int locationTargetItem = 0;
@@ -42,6 +46,7 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		if (isReceivedFromServer(dItemID)) {
 			receivedItemsQueue.pop_back();
 			//Nothing to do, just let the item go to the player's inventory
+			Core->saveConfigFiles = true;
 		}
 		else if ((serverLocationIndex = isARandomizedLocation(dItemID)) != -1) { //Check if the item is a randomized location
 			//From here, the item is considered as a location!	
@@ -65,6 +70,10 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		else {
 			//Nothing to do, this is a vanilla item so we will let it go to the player's inventory	
 		}
+
+#if DEBUG
+		printf("OUT itemID : %d\n", dItemID);
+#endif
 
 		*(int*)(pItemBuffer) = dItemID;
 		*(int*)(pItemBuffer + 0x04) = dItemQuantity;
