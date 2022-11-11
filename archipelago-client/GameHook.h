@@ -117,20 +117,20 @@ public:
 		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
 		{ 0x40000194, -1 }, //Large Soul of an Unknown Traveler
 		{ 0x40000191, -1 }, //Fading Soul
-		{ 0x40000194, -1 }, //Ring of Sacrifice
-		{ 0x40000194, -1 }, //Homeward Bone
-		{ 0x40000194, -1 }, //Ember
-		{ 0x40000194, -1 }, //Green Blossom
-		{ 0x40000194, -1 }, //Human Pine Resin
-		{ 0x40000194, -1 }, //Charcoal Pine Bundle
-		{ 0x40000194, -1 }, //Rotten Pine Resin
-		{ 0x40000194, -1 }, //Pale Tongue
-		{ 0x40000194, -1 }, //Black Firebomb
-		{ 0x40000194, -1 }, //Alluring Skull
-		{ 0x40000194, -1 }, //Undead Hunter Charm
-		{ 0x40000194, -1 }, //Duel Charm
-		{ 0x40000194, -1 }, //Rusted Coin
-		{ 0x40000194, -1 } //Rusted Gold Coin
+		{ 0x20004EF2, -1 }, //Ring of Sacrifice
+		{ 0x4000015E, -1 }, //Homeward Bone
+		{ 0x400001F4, -1 }, //Ember
+		{ 0x40000104, -1 }, //Green Blossom
+		{ 0x4000014E, -1 }, //Human Pine Resin
+		{ 0x40000154, -1 }, //Charcoal Pine Bundle
+		{ 0x40000157, -1 }, //Rotten Pine Resin
+		{ 0x40000175, -1 }, //Pale Tongue
+		{ 0x40000124, -1 }, //Black Firebomb
+		{ 0x40000126, -1 }, //Alluring Skull
+		{ 0x40000128, -1 }, //Undead Hunter Charm
+		{ 0x40000130, -1 }, //Duel Charm
+		{ 0x400001C7, -1 }, //Rusted Coin
+		{ 0x400001C9, -1 } //Rusted Gold Coin
 	};
 	bool enablePathOfTheDragon;
 
