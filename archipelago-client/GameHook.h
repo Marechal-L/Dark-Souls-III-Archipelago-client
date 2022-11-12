@@ -116,7 +116,6 @@ public:
 		{ 0x40000192, -1 }, //Large Soul of a Deserted Corpse
 		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
 		{ 0x40000194, -1 }, //Large Soul of an Unknown Traveler
-		{ 0x40000191, -1 }, //Fading Soul
 		{ 0x20004EF2, -1 }, //Ring of Sacrifice
 		{ 0x4000015E, -1 }, //Homeward Bone
 		{ 0x400001F4, -1 }, //Ember
@@ -125,7 +124,6 @@ public:
 		{ 0x40000154, -1 }, //Charcoal Pine Bundle
 		{ 0x40000157, -1 }, //Rotten Pine Resin
 		{ 0x40000175, -1 }, //Pale Tongue
-		{ 0x40000124, -1 }, //Black Firebomb
 		{ 0x40000126, -1 }, //Alluring Skull
 		{ 0x40000128, -1 }, //Undead Hunter Charm
 		{ 0x40000130, -1 }, //Duel Charm
