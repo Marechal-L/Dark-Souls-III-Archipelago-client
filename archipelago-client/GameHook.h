@@ -107,11 +107,11 @@ public:
 		{ 0x400003E8, -1 }, //Titanite Shard
 		{ 0x400003E9, -1 }, //Large Titanite Shard
 		{ 0x400003EA, -1 }, //Titanite Chunk
+		{ 0x400003FC, -1 }, //Titanite Scale
 		{ 0x400003EB, -1 }, //Titanite Slab
 		{ 0x4000085D, -1 }, //Estus Shard
 		{ 0x4000085F, -1 }, //Undead Bone Shard
 		{ 0x40000124, -1 }, //Firebomb
-		{ 0x40000129, -1 }, //Black Firebomb
 		{ 0x40000136, -1 }, //Throwing Knife
 		{ 0x40000190, -1 }, //Faded Soul
 		{ 0x40000191, -1 }, //Soul of a Deserted Corpse
