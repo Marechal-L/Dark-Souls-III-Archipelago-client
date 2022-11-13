@@ -111,7 +111,9 @@ public:
 		{ 0x4000085D, -1 }, //Estus Shard
 		{ 0x4000085F, -1 }, //Undead Bone Shard
 		{ 0x40000124, -1 }, //Firebomb
+		{ 0x40000129, -1 }, //Black Firebomb
 		{ 0x40000136, -1 }, //Throwing Knife
+		{ 0x40000190, -1 }, //Faded Soul
 		{ 0x40000191, -1 }, //Soul of a Deserted Corpse
 		{ 0x40000192, -1 }, //Large Soul of a Deserted Corpse
 		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
