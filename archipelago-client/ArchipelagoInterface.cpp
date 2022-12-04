@@ -56,6 +56,11 @@ BOOL CArchipelago::Initialise(std::string URI) {
 			(data.at("options").contains("no_equip_load")) ? (data.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
 		}
 
+		std::list<std::string> tags;
+		if (GameHook->dIsDeathLink) { 
+			tags.push_back("DeathLink"); 
+			ap->ConnectUpdate(false, 1, true, tags);
+		}
 
 		});
 	ap->set_slot_disconnected_handler([]() {

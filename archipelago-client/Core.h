@@ -35,7 +35,7 @@
 #define AP_MissingFile 11
 #define AP_MissingValue 12
 
-#define VERSION "2.0"
+#define VERSION "2.0.1"
 
 
 struct SCore;
