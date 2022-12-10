@@ -54,6 +54,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 			(data.at("options").contains("death_link")) ? (data.at("options").at("death_link").get_to(GameHook->dIsDeathLink)) : GameHook->dIsDeathLink = false;
 			(data.at("options").contains("no_spell_requirements")) ? (data.at("options").at("no_spell_requirements").get_to(GameHook->dIsNoSpellsRequirements)) : GameHook->dIsNoSpellsRequirements = false;
 			(data.at("options").contains("no_equip_load")) ? (data.at("options").at("no_equip_load").get_to(GameHook->dIsNoEquipLoadRequirements)) : GameHook->dIsNoEquipLoadRequirements = false;
+			(data.at("options").contains("enable_dlc")) ? (data.at("options").at("enable_dlc").get_to(GameHook->dEnableDLC)) : GameHook->dEnableDLC = false;
 		}
 
 		std::list<std::string> tags;
@@ -69,7 +70,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	ap->set_room_info_handler([]() {
 		std::list<std::string> tags;
 		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
-		ap->ConnectSlot(Core->pSlotName, "", 1, tags, { 0,3,6 });
+		ap->ConnectSlot(Core->pSlotName, "", 1, tags, { 0,3,7 });
 		});
 
 	ap->set_items_received_handler([](const std::list<APClient::NetworkItem>& items) {

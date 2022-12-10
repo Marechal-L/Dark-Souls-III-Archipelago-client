@@ -34,6 +34,7 @@
 #define AP_InitFailed 10
 #define AP_MissingFile 11
 #define AP_MissingValue 12
+#define FE_MissingDLC 13
 
 #define VERSION "2.0.1"
 

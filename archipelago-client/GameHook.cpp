@@ -11,6 +11,7 @@ LPVOID itemGibDataCodeCave;
 
 extern CItemRandomiser* ItemRandomiser;
 extern CArchipelago* ArchipelagoInterface;
+extern CCore* Core;
 
 /*
 * Check if a basic hook is working on this version of the game  
@@ -40,6 +41,11 @@ BOOL CGameHook::initialize() {
 	if (dIsNoSpellsRequirements) { RemoveSpellsRequirements(); }
 	if (dLockEquipSlots) { LockEquipSlots(); }
 	if (dIsNoEquipLoadRequirements) { RemoveEquipLoad(); }
+	if (dEnableDLC) {
+		if (!checkIsDlcOwned()) {
+			Core->Panic("You must own both the ASHES OF ARIANDEL and THE RINGED CITY DLC in order to enable the DLC option in Archipelago", "Missing DLC detected", FE_MissingDLC, 1);
+		}
+	}
 
 	return bReturn;
 }
@@ -198,6 +204,19 @@ uintptr_t CGameHook::FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsign
 	return addr;
 }
 
+uintptr_t CGameHook::FindDMAAddyStandalone(uintptr_t ptr, std::vector<unsigned int> offsets) {
+
+	DWORD processId = GetCurrentProcessId();
+	HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
+
+	uintptr_t addr = ptr;
+	for (unsigned int i = 0; i < offsets.size(); ++i) {
+		ReadProcessMemory(hProc, (BYTE*)addr, &addr, sizeof(addr), 0);
+		addr += offsets[i];
+	}
+	return addr;
+}
+
 uintptr_t CGameHook::GetModuleBaseAddress() {
 	const char* lpModuleName = "DarkSoulsIII.exe";
 	DWORD procId = GetCurrentProcessId();
@@ -279,4 +298,66 @@ VOID CGameHook::RemoveEquipLoad() {
 	WriteProcessMemory(hProcess, (BYTE*)equipLoadAddr, &newValue, sizeof(BYTE) * 4, nullptr);
 
 	return;
+}
+
+BYTE* CGameHook::findPattern(BYTE* pBaseAddress, BYTE* pbMask, const char* pszMask, size_t nLength) {
+	auto DataCompare = [](const BYTE* pData, const BYTE* mask, const char* cmask, BYTE chLast, size_t iEnd) -> bool {
+		if (pData[iEnd] != chLast) return false;
+		for (; *cmask; ++cmask, ++pData, ++mask) {
+			if (*cmask == 'x' && *pData != *mask) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	auto iEnd = strlen(pszMask) - 1;
+	auto chLast = pbMask[iEnd];
+
+	auto* pEnd = pBaseAddress + nLength - strlen(pszMask);
+	for (; pBaseAddress < pEnd; ++pBaseAddress) {
+		if (DataCompare(pBaseAddress, pbMask, pszMask, chLast, iEnd)) {
+			return pBaseAddress;
+		}
+	}
+
+	return nullptr;
+}
+
+BOOL CGameHook::checkIsDlcOwned() {
+	BOOL ret = false;
+
+	int executableSize = 100093 * 1000;
+	BYTE* patternAddr = findPattern((BYTE*)GetModuleBaseAddress(), (BYTE*)csDlcPattern, csDlcMask, executableSize);
+	if (patternAddr != nullptr) {
+		DWORD processId = GetCurrentProcessId();
+		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
+
+		int thirdInteger = -1;
+		SIZE_T flag;
+		ReadProcessMemory(hProcess, (BYTE*)(patternAddr + 3), &thirdInteger, sizeof(thirdInteger), &flag);
+		patternAddr = patternAddr + thirdInteger + 7;
+		CSDlc = (uintptr_t)patternAddr;
+
+		std::vector<unsigned int> DLC_1_Offsets = { 0x11 };
+		uintptr_t dlc_1_addr = FindDMAAddyStandalone((uintptr_t)CSDlc, DLC_1_Offsets);
+
+		std::vector<unsigned int> DLC_2_Offsets = { 0x12 };
+		uintptr_t dlc_2_addr = FindDMAAddyStandalone((uintptr_t)CSDlc, DLC_2_Offsets);
+
+		BYTE isDlc_1 = 0x05;
+		ReadProcessMemory(hProcess, (BYTE*)dlc_1_addr, &isDlc_1, sizeof(BYTE), nullptr);
+
+		BYTE isDlc_2 = 0x05;
+		ReadProcessMemory(hProcess, (BYTE*)dlc_2_addr, &isDlc_2, sizeof(BYTE), nullptr);
+
+		if (isDlc_1 == 1 && isDlc_2 == 1) {
+			ret = true;
+		} else {
+			printf("Missing DLC!\n DLC #1 : %d , DLC #2 : %d\n", isDlc_1, isDlc_2);
+		}
+	}
+
+	return ret;
 }

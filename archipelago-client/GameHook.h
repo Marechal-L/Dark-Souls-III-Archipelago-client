@@ -20,6 +20,7 @@ public:
 	virtual VOID itemGib(DWORD itemId);
 	virtual BOOL isSoulOfCinderDefeated();
 	virtual VOID manageDeathLink();
+	virtual BYTE* findPattern(BYTE* pBaseAddress, BYTE* pbMask, const char* pszMask, size_t nLength);
 	int healthPoint = -1, lastHealthPoint = -1, playTime = -1;
 	char soulOfCinderDefeated;
 	SIZE_T healthPointRead, playTimeRead, soulOfCinderDefeatedFlagRead;
@@ -30,6 +31,7 @@ public:
 	DWORD dIsNoSpellsRequirements;
 	DWORD dIsNoEquipLoadRequirements;
 	DWORD dIsDeathLink;
+	DWORD dEnableDLC;
 	UINT_PTR qLocalPlayer = 0x144740178;
 	UINT_PTR qWorldChrMan = 0x144768E78;
 	UINT_PTR qSprjLuaEvent = 0x14473A9C8;
@@ -44,13 +46,29 @@ private:
 	static uintptr_t FindExecutableAddress(uintptr_t ptrOffset, std::vector<unsigned int> offsets);
 	static uintptr_t GetModuleBaseAddress();
 	static uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsigned int> offsets);
+	static uintptr_t FindDMAAddyStandalone(uintptr_t ptr, std::vector<unsigned int> offsets);
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
 	static VOID LockEquipSlots();
 	static VOID RemoveSpellsRequirements();
 	static VOID RemoveEquipLoad();
 	static VOID killThePlayer();
+	BOOL checkIsDlcOwned();
 
 	
+	
+	uintptr_t BaseB = -1;
+	uintptr_t GameFlagData = -1;
+	uintptr_t Param = -1;
+	uintptr_t EquipLoad = -1;
+
+	uintptr_t BaseA = -1;
+	const char* baseAPattern = reinterpret_cast<const char*>("\x48\x8B\x05\x00\x00\x00\x00\x48\x85\xc0\x00\x00\x48\x8b\x40\x00\xc3");
+	const char* baseAMask = "xxx????xxx??xxx?x";
+
+	uintptr_t CSDlc = -1;
+	const char* csDlcPattern = reinterpret_cast<const char*>("\x48\x8B\x0d\x00\x00\x00\x00\x48\x85\xc9\x0f\x84\x00\x00\x00\x00\x0f\xba\xe0\x00\x72\x65\x0f\xba\xe8");
+	const char* csDlcMask = "xxx????xxxxx????xxx?xxxxx";
+
 
 
 	BYTE ItemGibDataShellcode[17] =
