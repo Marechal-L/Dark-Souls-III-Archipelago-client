@@ -3,15 +3,13 @@
 Dark Souls III client made for Archipelago multiworld randomizer. See [archipelago.gg](https://archipelago.gg/)
 
 ## How to install
-- Download the lastest version available [here](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases).
-- Copy the two following files into your game folder :
-	- dinput8.dll
-	- DarkSoulsIII.exe
+- Download the lastest version available [here](https://github.com/MightyCaesar37/Dark-Souls-III-Archipelago-client/releases).
+- Extract DS3-Archipelago.zip into your game folder
 - Generate a game using Archipelago.
 - Download the file from the room.
 - Rename it into "AP.json".
 - Copy the "AP.json" file into your game folder.
-
+- Launch game by running "DS3-Archipelago.bat"
 ## Commands
 - All client commands start with "/" and archipelago commands start with "!" :
 	- /help : Prints this help message.
