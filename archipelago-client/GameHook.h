@@ -148,7 +148,8 @@ public:
 		{ 0x40000128, -1 }, //Undead Hunter Charm
 		{ 0x40000130, -1 }, //Duel Charm
 		{ 0x400001C7, -1 }, //Rusted Coin
-		{ 0x400001C9, -1 } //Rusted Gold Coin
+		{ 0x400001C9, -1 }, //Rusted Gold Coin
+		{ 0x40000406, -1 } //Twinkling Titanite
 	};
 	bool enablePathOfTheDragon;
 
