@@ -47,7 +47,7 @@ BOOL CCore::Initialise() {
 	freopen_s(&fp, "CONIN$", "r", stdin);
 	printf_s("Archipelago client v%s \n", VERSION);
 	printf_s("A new version may or may not be available, please check this link for updates : %s \n\n\n", "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases");
-	printf_s("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}' to connect to the room\n\n");
+	printf_s("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' to connect to the room\n\n");
 
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
@@ -160,7 +160,7 @@ VOID CCore::InputCommand() {
 			printf("List of available commands : \n");
 			printf("/help : Prints this help message.\n");
 			printf("!help : Prints the help message related to Archipelago.\n");
-			printf("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} : Connect to the specified server.\n");
+			printf("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}] : Connect to the specified server.\n");
 		}
 
 #ifdef DEBUG
@@ -187,12 +187,19 @@ VOID CCore::InputCommand() {
 			std::string param = line.substr(9);
 			int spaceIndex = param.find(" ");
 			if (spaceIndex == std::string::npos) {
-				printf("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}' \n");
+				printf("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' \n");
 			} else {
+				int passwordIndex = param.find("password:");
 				std::string address = param.substr(0, spaceIndex);
-				std::string slotName = param.substr(spaceIndex + 1);
+				std::string slotName = param.substr(spaceIndex + 1, passwordIndex - spaceIndex - 2);
+				std::string password = "";
 				std::cout << address << " - " << slotName << "\n";
 				Core->pSlotName = slotName;
+				if (passwordIndex != std::string::npos)
+				{
+					password = param.substr(passwordIndex + 9);
+				}
+				Core->pPassword = password;
 				if (!ArchipelagoInterface->Initialise(address)) {
 					Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
 					int3
