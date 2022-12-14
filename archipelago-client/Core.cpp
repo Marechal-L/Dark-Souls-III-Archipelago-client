@@ -205,7 +205,6 @@ VOID CCore::InputCommand() {
 					int3
 				}
 			}
-			
 		}
 
 		if (line.find("!") == 0) {
