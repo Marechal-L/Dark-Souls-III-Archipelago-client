@@ -53,6 +53,7 @@ public:
 	virtual BOOL CheckOldApFile();
 
 	std::string pSlotName;
+	std::string pPassword;
 	std::string pSeed;
 	BOOL saveConfigFiles = false;
 	BOOL sendGoalStatus = true;
