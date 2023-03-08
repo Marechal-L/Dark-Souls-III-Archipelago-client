@@ -19,6 +19,10 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	
 	// read or generate uuid, required by AP
 	std::string uuid = ap_get_uuid(UUID_FILE);
+	if (ap != nullptr) {
+		ap->reset();
+	}
+
 	ap = new APClient(uuid, "Dark Souls III", URI);
 
 	ap_sync_queued = false;
@@ -28,7 +32,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 		});
 	ap->set_slot_connected_handler([](const json& data) {
 		
-		printf("Reading slot data ... \n");
+		printf("Slot connected successfully, reading slot data ... \n");
 
 		// read the archipelago slot data
 
@@ -65,6 +69,14 @@ BOOL CArchipelago::Initialise(std::string URI) {
 
 		});
 	ap->set_slot_disconnected_handler([]() {
+		printf("Slot disconnected\n");
+		});
+	ap->set_slot_refused_handler([](const std::list<std::string>& errors){
+		printf("\n");
+		for (const auto& error : errors) {
+			printf("Connection refused : %s\n", error.c_str());
+		}
+		printf("\n");
 		});
 
 	ap->set_room_info_handler([]() {
