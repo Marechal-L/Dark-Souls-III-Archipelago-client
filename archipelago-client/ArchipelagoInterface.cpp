@@ -82,7 +82,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 	ap->set_room_info_handler([]() {
 		std::list<std::string> tags;
 		if (GameHook->dIsDeathLink) { tags.push_back("DeathLink"); }
-		ap->ConnectSlot(Core->pSlotName, Core->pPassword, 1, tags, { 0,3,7 });
+		ap->ConnectSlot(Core->pSlotName, Core->pPassword, 5, tags, { 0,3,7 });
 		});
 
 	ap->set_items_received_handler([](const std::list<APClient::NetworkItem>& items) {
@@ -121,7 +121,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 				}
 			}
 			if (address == 0) {
-				std::cout << "items_received_handler " << itemname.c_str() << " not found" << "\n";
+				std::cout << "The " << itemname.c_str() << " has not been found in the item pool. Please check your seed options" << "\n";
 				return;
 			}
 
