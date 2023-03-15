@@ -25,7 +25,7 @@ VOID CCore::Start() {
 
 	while (true) {
 		Core->Run();
-		Sleep(2000);
+		Sleep(RUN_SLEEP);
 	};
 
 	delete CoreStruct;
@@ -72,15 +72,16 @@ BOOL CCore::CheckOldApFile() {
 }
 
 bool isInit = false;
+int initProtectionDelay = 3;
 
 VOID CCore::Run() {
 
 	ArchipelagoInterface->update();
-
 	GameHook->updateRuntimeValues();
+
 	if(GameHook->healthPointRead != 0 && GameHook->playTimeRead !=0) {
 
-		if (!isInit && ArchipelagoInterface->isConnected()) {
+		if (!isInit && ArchipelagoInterface->isConnected() && initProtectionDelay <= 0) {
 			ReadConfigFiles();
 			CleanReceivedItemsList();
 
@@ -90,20 +91,26 @@ VOID CCore::Run() {
 				Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
 				int3
 			}
+			printf("Mod initialized successfully\n");
 			isInit = true;
 		}
 
+		if (isInit) {
+			GameHook->manageDeathLink();
 
-		GameHook->manageDeathLink();
+			if (!ItemRandomiser->receivedItemsQueue.empty()) {
+				GameHook->giveItems();
+				pLastReceivedIndex++;
+			}
 
-		if (!ItemRandomiser->receivedItemsQueue.empty()) {
-			GameHook->giveItems();
-			pLastReceivedIndex++;
-		}
-
-		if (GameHook->isSoulOfCinderDefeated() && sendGoalStatus) {
-			sendGoalStatus = false;
-			ArchipelagoInterface->gameFinished();
+			if (GameHook->isSoulOfCinderDefeated() && sendGoalStatus) {
+				sendGoalStatus = false;
+				ArchipelagoInterface->gameFinished();
+			}
+		} else {
+			int secondsRemaining = (RUN_SLEEP / 1000) * initProtectionDelay;
+			printf("The mod will be initialized in %d seconds\n", secondsRemaining);
+			initProtectionDelay--;
 		}
 	}
 

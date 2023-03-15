@@ -36,7 +36,7 @@
 #define AP_MissingValue 12
 #define FE_MissingDLC 13
 
-#define VERSION "2.1.0"
+#define VERSION "2.1.1"
 
 
 struct SCore;
@@ -60,4 +60,6 @@ public:
 	BOOL sendGoalStatus = true;
 	std::list<std::string> pReceivedItems = { };
 	int pLastReceivedIndex = 0;
+
+	static const int RUN_SLEEP = 2000;
 };
