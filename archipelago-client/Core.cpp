@@ -45,9 +45,11 @@ BOOL CCore::Initialise() {
 	SetConsoleTitleA("Dark Souls III - Archipelago Console");
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONIN$", "r", stdin);
-	printf_s("Archipelago client v%s \n", VERSION);
-	printf_s("A new version may or may not be available, please check this link for updates : %s \n\n\n", "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases");
-	printf_s("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' to connect to the room\n\n");
+	Core->Logger(std::string("Archipelago client v") + VERSION);
+	Core->Logger("A new version may or may not be available, please check this link for updates : https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases", false);
+	Core->Logger("Type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' to connect to the room", false);
+	Core->Logger("Type '/help for more information", false);
+	Core->Logger("-----------------------------------------------------", false);
 
 	if (!GameHook->preInitialize()) {
 		Core->Panic("Check if the game version is 1.15 and not 1.15.1, you must use the provided DarkSoulsIII.exe", "Cannot hook the game", FE_InitFailed, 1);
@@ -55,7 +57,7 @@ BOOL CCore::Initialise() {
 	}
 
 	if (CheckOldApFile()) {
-		printf_s("The AP.json file is not supported in this version, make sure to finish your previous seed on version 1.2 or use this version on the new Archipelago server\n\n");
+		Core->Logger("The AP.json file is not supported in this version, make sure to finish your previous seed on version 1.2 or use this version on the new Archipelago server");
 	}
 
 	//Start command prompt
@@ -125,7 +127,7 @@ VOID CCore::Run() {
 */
 VOID CCore::CleanReceivedItemsList() {
 	if (!ItemRandomiser->receivedItemsQueue.empty()) {
-
+		Core->Logger("Removing " + pLastReceivedIndex + std::string(" items according to the last_received_index"), true, false);
 		for (int i = 0; i < pLastReceivedIndex; i++) {
 			ItemRandomiser->receivedItemsQueue.pop_back();
 		}
@@ -141,7 +143,7 @@ VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD d
 
 	sprintf_s(pOutput, "\n%s -> %s (%i)\n", pSort, pMessage, dError);
 
-	printf("%s", pOutput);
+	Core->Logger(pOutput);
 	
 	if (dIsFatalError) {
 		sprintf_s(pTitle, "[Archipelago client - Fatal Error]");
@@ -194,7 +196,7 @@ VOID CCore::InputCommand() {
 			std::string param = line.substr(9);
 			int spaceIndex = param.find(" ");
 			if (spaceIndex == std::string::npos) {
-				printf("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]' \n");
+				Core->Logger("Missing parameter : Make sure to type '/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}]'");
 			} else {
 				int passwordIndex = param.find("password:");
 				std::string address = param.substr(0, spaceIndex);
@@ -213,8 +215,7 @@ VOID CCore::InputCommand() {
 				}
 			}
 		}
-
-		if (line.find("!") == 0) {
+		else if (line.find("!") == 0) {
 			ArchipelagoInterface->say(line);
 		}
 	}
@@ -231,25 +232,29 @@ VOID CCore::ReadConfigFiles() {
 		//Check outside the folder
 		std::ifstream gameFile(filename);
 		if (!gameFile.good()) {
-			
 			//Missing session file, that's probably a new game
+			Logger("No save found, starting a new game", true, false);
 			return;
 		}
 	}
 
-#if DEBUG
-	printf("Reading %s ... \n", filename.c_str());
-#endif
-
 	//Read the game file
+	Logger("Reading " + outputFolder + "/" + filename, true, false);
 	json k;
-	gameFile >> k;
-	k.at("last_received_index").get_to(pLastReceivedIndex);
-	std::map<DWORD, int>::iterator it;
-	for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
-		char buf[10];
-		sprintf(buf, "0x%x", it->first);
-		k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+
+	try {
+		gameFile >> k;
+		k.at("last_received_index").get_to(pLastReceivedIndex);
+		std::map<DWORD, int>::iterator it;
+		for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
+			char buf[10];
+			sprintf(buf, "0x%x", it->first);
+			k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+		}
+	} catch (const std::exception&) {
+		Logger("Failed reading " + outputFolder + "/" + filename, true, false);
+		gameFile.close();
+		throw;
 	}
 
 	gameFile.close();
@@ -261,15 +266,11 @@ VOID CCore::SaveConfigFiles() {
 		return;
 
 	saveConfigFiles = false;
-
 	
 	std::string outputFolder = "archipelago";
 	std::string filename = Core->pSeed + "_" + Core->pSlotName + ".json";
 
-	
-#if DEBUG
-	printf("Writing %s ... \n", filename.c_str());
-#endif
+	Logger("Writing to " + outputFolder + "/" + filename, true, false);
 
 	json j;
 	j["last_received_index"] = pLastReceivedIndex;
@@ -281,14 +282,53 @@ VOID CCore::SaveConfigFiles() {
 		j["progressive_locations"][buf] = it->second;
 	}
 
-
-	if (CreateDirectory(outputFolder.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
-		std::ofstream outfile(outputFolder + "\\" + filename);
-		outfile << std::setw(4) << j << std::endl;
+	try {
+		if (CreateDirectory(outputFolder.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {
+			std::ofstream outfile(outputFolder + "\\" + filename);
+			outfile << std::setw(4) << j << std::endl;
+			outfile.close();
+		}
+		else {
+			std::ofstream outfile(filename);
+			outfile << std::setw(4) << j << std::endl;
+			outfile.close();
+		}
 	}
-	else {
-		std::ofstream outfile(filename);
-		outfile << std::setw(4) << j << std::endl;
+	catch (const std::exception&) {
+		Logger("Failed writing " + outputFolder + "/" + filename, true, true);
+	}
+}
+
+
+inline std::string getCurrentDateTime(std::string s) {
+	time_t now = time(0);
+	struct tm  tstruct;
+	char buf[80];
+	tstruct = *localtime(&now);
+	if (s == "now")
+		strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+	else if (s == "date")
+		strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+	return std::string(buf);
+};
+
+VOID CCore::Logger(std::string logMessage, BOOL inFile, BOOL inConsole) {
+
+	if(inConsole)
+		std::cout << logMessage << std::endl;
+
+	if (inFile) {
+		try {
+			std::string outputFolder = "archipelago";
+			std::string filename = "log_" + getCurrentDateTime("date") + ".txt";
+			std::ofstream logFile(outputFolder + "\\" + filename, std::ios_base::out | std::ios_base::app);
+
+			std::string now = getCurrentDateTime("now");
+			logFile << now << '\t' << logMessage << '\n';
+			logFile.close();
+		} catch (const std::exception&) {
+			//Logging is optional and should not crash the mod
+		}
 	}
 }
 

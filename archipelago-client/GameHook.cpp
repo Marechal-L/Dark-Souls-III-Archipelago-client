@@ -17,24 +17,53 @@ extern CCore* Core;
 * Check if a basic hook is working on this version of the game  
 */
 BOOL CGameHook::preInitialize() {
-	if (MH_Initialize() != MH_OK) return false;
-	return Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+	Core->Logger("CGameHook::preInitialize", true, false);
+
+	try {
+		if (MH_Initialize() != MH_OK) return false;
+	} catch (const std::exception&) {
+		Core->Logger("Cannot initialize MinHook");
+		return false;
+	}
+
+	try {
+		return Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot hook the game 0x1407BBA80");
+	}
+	return false;
 }
 
 BOOL CGameHook::initialize() {
+	Core->Logger("CGameHook::initialize", true, false);
 
 	BOOL bReturn = true;
 
 	//Inject ItemGibData
-	itemGibDataCodeCave = InjectShellCode(nullptr, ItemGibDataShellcode, 17);
+	try {
+		itemGibDataCodeCave = InjectShellCode(nullptr, ItemGibDataShellcode, 17);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot inject ItemGibData");
+		return false;
+	}
 
 	//Modify ItemGibShellcode
-	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 15, itemGibDataCodeCave, 0, sizeof(void*));
-	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 26, itemGibDataCodeCave, 4, 4);
-	bReturn &= replaceShellCodeAddress(ItemGibShellcode, 33, itemGibDataCodeCave, 8, 4);
+	try {
+		bReturn &= replaceShellCodeAddress(ItemGibShellcode, 15, itemGibDataCodeCave, 0, sizeof(void*));
+		bReturn &= replaceShellCodeAddress(ItemGibShellcode, 26, itemGibDataCodeCave, 4, 4);
+		bReturn &= replaceShellCodeAddress(ItemGibShellcode, 33, itemGibDataCodeCave, 8, 4);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot modify ItemGibShellcode");
+		return false;
+	}
 
 	//Inject ItemGibShellcode
-	LPVOID itemGibCodeCave = InjectShellCode((LPVOID)0x13ffe0000, ItemGibShellcode, 93);
+	try {
+		LPVOID itemGibCodeCave = InjectShellCode((LPVOID)0x13ffe0000, ItemGibShellcode, 93);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot inject ItemGibShellcode");
+		return false;
+	}
 
 	if (dIsAutoEquip) { bReturn &= Hook(0x1407BBE92, (DWORD64)&tAutoEquip, &rAutoEquip, 6); }
 	if (dIsNoWeaponRequirements) { bReturn &= Hook(0x140C073B9, (DWORD64)&tNoWeaponRequirements, &rNoWeaponRequirements, 7); }
@@ -59,6 +88,7 @@ VOID CGameHook::manageDeathLink() {
 		killThePlayer();
 	} else if(lastHealthPoint != 0 && healthPoint == 0) { //The player just died, ignore the deathLink if received
 		if (deathLinkData) {
+			Core->Logger("The player just died, a death link has been ignored", true, false);
 			deathLinkData = false;
 			return;
 		}
@@ -67,6 +97,7 @@ VOID CGameHook::manageDeathLink() {
 }
 
 VOID CGameHook::killThePlayer() {
+	Core->Logger("Kill the player", true, false);
 	DWORD processId = GetCurrentProcessId();
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
 	std::vector<unsigned int> hpOffsets = { 0x80, 0x1F90, 0x18, 0xD8 };
@@ -77,6 +108,7 @@ VOID CGameHook::killThePlayer() {
 }
 
 BOOL CGameHook::updateRuntimeValues() {
+
 	DWORD processId = GetCurrentProcessId();
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);
 
@@ -109,7 +141,9 @@ BOOL CGameHook::updateRuntimeValues() {
 
 VOID CGameHook::giveItems() {
 	//Send the next item in the list
-	if (!ItemRandomiser->receivedItemsQueue.empty()) {
+	int size = ItemRandomiser->receivedItemsQueue.size();
+	if (size > 0) {
+		Core->Logger("Send an item from the list of " + size + std::string(" items"), true, false);
 		itemGib(ItemRandomiser->receivedItemsQueue.back());
 	}
 }
@@ -129,14 +163,22 @@ VOID CGameHook::itemGib(DWORD itemId) {
 	char* littleEndianItemId = (char*)malloc(sizeof(DWORD));
 	ConvertToLittleEndianByteArray((uintptr_t)itemId, littleEndianItemId);
 
-	DWORD memory = 0;
-	ReadProcessMemory(hProcess, (BYTE*)gibItem, &memory, sizeof(memory), nullptr);
-	DWORD newMemory = itemId;
-	WriteProcessMemory(hProcess, (BYTE*)gibItem, &newMemory, sizeof(newMemory), nullptr);
+	try {
+		DWORD memory = 0;
+		ReadProcessMemory(hProcess, (BYTE*)gibItem, &memory, sizeof(memory), nullptr);
+		DWORD newMemory = itemId;
+		WriteProcessMemory(hProcess, (BYTE*)gibItem, &newMemory, sizeof(newMemory), nullptr);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot write the item to the memory");
+	}
 
-	typedef int func(void);
-	func* f = (func*)0x13ffe0000;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)f, NULL, NULL, NULL);
+	try {
+		typedef int func(void);
+		func* f = (func*)0x13ffe0000;
+		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)f, NULL, NULL, NULL);
+	} catch (const std::exception&) {
+		Core->Logger("Cannot start the 0x13ffe0000 thread");
+	}
 }
 
 BOOL CGameHook::Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen) {

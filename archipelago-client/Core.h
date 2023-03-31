@@ -52,6 +52,7 @@ public:
 	virtual VOID SaveConfigFiles();
 	virtual VOID CleanReceivedItemsList();
 	virtual BOOL CheckOldApFile();
+	virtual VOID Logger(std::string logMessage, BOOL inFile = true, BOOL inConsole = true);
 
 	std::string pSlotName;
 	std::string pPassword;
