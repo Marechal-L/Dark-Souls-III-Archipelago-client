@@ -36,7 +36,7 @@
 #define AP_MissingValue 12
 #define FE_MissingDLC 13
 
-#define VERSION "2.1.1"
+#define VERSION "2.1.2"
 
 
 struct SCore;
