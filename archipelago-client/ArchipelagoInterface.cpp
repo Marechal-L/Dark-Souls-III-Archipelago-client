@@ -127,9 +127,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 		}
 		});
 
-	ap->set_data_package_changed_handler([](const json& data) {
-		ap->save_data_package(DATAPACKAGE_CACHE);
-		});
+	//TODO :   * you can still use `set_data_package` or `set_data_package_from_file` during migration to make use of the old cache
 
 	ap->set_print_handler([](const std::string& msg) {
 		Core->Logger(msg);
