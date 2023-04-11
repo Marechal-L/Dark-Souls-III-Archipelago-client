@@ -56,6 +56,11 @@ BOOL CCore::Initialise() {
 		return false;
 	}
 
+	if (!GameHook->initialize()) {
+		Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
+		return false;
+	}
+
 	if (CheckOldApFile()) {
 		Core->Logger("The AP.json file is not supported in this version, make sure to finish your previous seed on version 1.2 or use this version on the new Archipelago server");
 	}
@@ -87,10 +92,10 @@ VOID CCore::Run() {
 			ReadConfigFiles();
 			CleanReceivedItemsList();
 
-			//Inject custom shell codes
-			BOOL initResult = GameHook->initialize();
+			//Apply player settings
+			BOOL initResult = GameHook->applySettings();
 			if (!initResult) {
-				Core->Panic("Failed to initialise GameHook", "...\\Randomiser\\Core\\Core.cpp", FE_InitFailed, 1);
+				Core->Panic("Failed to apply settings", "...\\Randomiser\\Core\\Core.cpp", FE_ApplySettings, 1);
 				int3
 			}
 			printf("Mod initialized successfully\n");

@@ -103,7 +103,7 @@ BOOL CArchipelago::Initialise(std::string URI) {
 			}
 
 			std::ostringstream stringStream;
-			stringStream << "#" << item.index << ": " << itemname.c_str() << " from " << sender.c_str() << " - " << location.c_str() << std::endl;
+			stringStream << "#" << item.index << ": " << itemname.c_str() << " from " << sender.c_str() << " - " << location.c_str();
 			std::string itemDesc = stringStream.str();
 
 			//Add the item to the list of already received items, only for logging purpose

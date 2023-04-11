@@ -15,6 +15,7 @@ class CGameHook {
 public:
 	virtual BOOL preInitialize();
 	virtual BOOL initialize();
+	virtual BOOL applySettings();
 	virtual BOOL updateRuntimeValues();
 	virtual VOID giveItems();
 	virtual VOID itemGib(DWORD itemId);

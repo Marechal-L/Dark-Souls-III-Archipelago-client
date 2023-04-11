@@ -65,6 +65,12 @@ BOOL CGameHook::initialize() {
 		return false;
 	}
 
+	return bReturn;
+}
+
+BOOL CGameHook::applySettings() {
+	BOOL bReturn = true;
+
 	if (dIsAutoEquip) { bReturn &= Hook(0x1407BBE92, (DWORD64)&tAutoEquip, &rAutoEquip, 6); }
 	if (dIsNoWeaponRequirements) { bReturn &= Hook(0x140C073B9, (DWORD64)&tNoWeaponRequirements, &rNoWeaponRequirements, 7); }
 	if (dIsNoSpellsRequirements) { RemoveSpellsRequirements(); }
@@ -75,7 +81,6 @@ BOOL CGameHook::initialize() {
 			Core->Panic("You must own both the ASHES OF ARIANDEL and THE RINGED CITY DLC in order to enable the DLC option in Archipelago", "Missing DLC detected", FE_MissingDLC, 1);
 		}
 	}
-
 	return bReturn;
 }
 
@@ -143,7 +148,7 @@ VOID CGameHook::giveItems() {
 	//Send the next item in the list
 	int size = ItemRandomiser->receivedItemsQueue.size();
 	if (size > 0) {
-		Core->Logger("Send an item from the list of " + size + std::string(" items"), true, false);
+		Core->Logger("Send an item from the list of items", true, false);
 		itemGib(ItemRandomiser->receivedItemsQueue.back());
 	}
 }

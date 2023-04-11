@@ -35,6 +35,7 @@
 #define AP_MissingFile 11
 #define AP_MissingValue 12
 #define FE_MissingDLC 13
+#define FE_ApplySettings 14
 
 #define VERSION "2.1.2"
 
