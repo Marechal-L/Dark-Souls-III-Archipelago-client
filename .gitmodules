@@ -10,12 +10,10 @@
 	path = archipelago-client/subprojects/valijson
 	url = https://github.com/tristanpenman/valijson.git
 	
-
 [submodule "archipelago-client/subprojects/wswrap"]
 	path = archipelago-client/subprojects/wswrap
 	url = https://github.com/black-sliver/wswrap.git
 	
-
 [submodule "archipelago-client/subprojects/websocketpp"]
 	path = archipelago-client/subprojects/websocketpp
 	url = https://github.com/zaphoyd/websocketpp.git
