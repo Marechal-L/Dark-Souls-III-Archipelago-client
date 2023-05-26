@@ -34,9 +34,9 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 		dItemQuantity = *(int*)(pItemBuffer + 0x04);
 		dItemDurability = *(int*)(pItemBuffer + 0x08);
 
-#if DEBUG
-		printf("IN itemID : %d\n", dItemID);
-#endif
+		if (Core->debugLogs) {
+			printf("IN itemID : %d\n", dItemID);
+		}
 
 		//Make some checks about the item picked by the player
 		int serverLocationIndex = -1;
@@ -71,9 +71,9 @@ VOID CItemRandomiser::RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer,
 			//Nothing to do, this is a vanilla item so we will let it go to the player's inventory	
 		}
 
-#if DEBUG
-		printf("OUT itemID : %d\n", dItemID);
-#endif
+		if (Core->debugLogs) {
+			printf("OUT itemID : %d\n", dItemID);
+		}
 
 		*(int*)(pItemBuffer) = dItemID;
 		*(int*)(pItemBuffer + 0x04) = dItemQuantity;
