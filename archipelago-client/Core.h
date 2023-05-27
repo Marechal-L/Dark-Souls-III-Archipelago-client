@@ -62,6 +62,7 @@ public:
 	BOOL sendGoalStatus = true;
 	std::list<std::string> pReceivedItems = { };
 	int pLastReceivedIndex = 0;
+	BOOL debugLogs = false;
 
 	static const int RUN_SLEEP = 2000;
 };
