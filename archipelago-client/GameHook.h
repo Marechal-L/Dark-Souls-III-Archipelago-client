@@ -137,6 +137,8 @@ public:
 		{ 0x40000192, -1 }, //Large Soul of a Deserted Corpse
 		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
 		{ 0x40000194, -1 }, //Large Soul of an Unknown Traveler
+		{ 0x40000195, -1 }, //Soul of a Nameless Soldier
+		{ 0x40000196, -1 }, //Large Soul of a Nameless Soldier
 		{ 0x20004EF2, -1 }, //Ring of Sacrifice
 		{ 0x4000015E, -1 }, //Homeward Bone
 		{ 0x400001F4, -1 }, //Ember
@@ -155,6 +157,38 @@ public:
 		{ 0x40000198, -1 }, //Large Soul of a Weary Warrior
 		{ 0x40000199, -1 }, //Soul of a Crestfallen Knight
 		{ 0x4000019A, -1 }, //Large Soul of a Crestfallen Knight
+		{ 0x400000F0, -1 }, //Divine Blessing
+		{ 0x400000F1, -1 }, //Hidden Blessing
+		{ 0x40000106, -1 }, //Budding Green Blossom
+		{ 0x4000010E, -1 }, //Bloodred Moss Clump
+		{ 0x4000010F, -1 }, //Purple Moss Clump
+		{ 0x40000110, -1 }, //Blooming Purple Moss Clump
+		{ 0x40000112, -1 }, //Purging Stone
+		{ 0x40000114, -1 }, //Rime-blue Moss Clump
+		{ 0x40000118, -1 }, //Repair Powder
+		{ 0x40000122, -1 }, //Kukri
+		{ 0x4000012C, -1 }, //Lightning Urn
+		{ 0x4000017C, -1 }, //Rubbish
+		{ 0x400001CA, -1 }, //Blue Bug Pellet
+		{ 0x400001CB, -1 }, //Red Bug Pellet
+		{ 0x400001CC, -1 }, //Yellow Bug Pellet
+		{ 0x400001CD, -1 }, //Black Bug Pellet
+		{ 0x4000044C, -1 }, //Heavy Gem
+		{ 0x40000456, -1 }, //Sharp Gem
+		{ 0x40000460, -1 }, //Refined Gem
+		{ 0x4000046A, -1 }, //Crystal Gem
+		{ 0x40000474, -1 }, //Simple Gem
+		{ 0x4000047E, -1 }, //Fire Gem
+		{ 0x40000488, -1 }, //Chaos Gem
+		{ 0x40000492, -1 }, //Lightning Gem
+		{ 0x4000049C, -1 }, //Deep Gem
+		{ 0x400004A6, -1 }, //Dark Gem
+		{ 0x400004B0, -1 }, //Poison Gem
+		{ 0x400004BA, -1 }, //Blood Gem
+		{ 0x400004C4, -1 }, //Raw Gem
+		{ 0x400004CE, -1 }, //Blessed Gem
+		{ 0x400004D8, -1 }, //Hollow Gem
+		{ 0x400004E2, -1 }, //Shriving Stone
 	};
 	bool enablePathOfTheDragon;
 

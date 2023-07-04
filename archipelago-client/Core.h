@@ -37,7 +37,7 @@
 #define FE_MissingDLC 13
 #define FE_ApplySettings 14
 
-#define VERSION "2.1.3"
+#define VERSION "2.2.0-SNAPSHOT"
 
 
 struct SCore;
@@ -62,6 +62,7 @@ public:
 	BOOL sendGoalStatus = true;
 	std::list<std::string> pReceivedItems = { };
 	int pLastReceivedIndex = 0;
+	BOOL debugLogs = false;
 
 	static const int RUN_SLEEP = 2000;
 };

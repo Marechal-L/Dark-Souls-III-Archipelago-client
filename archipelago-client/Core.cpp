@@ -140,13 +140,12 @@ VOID CCore::CleanReceivedItemsList() {
 }
 
 
-
 VOID CCore::Panic(const char* pMessage, const char* pSort, DWORD dError, DWORD dIsFatalError) {
 
 	char pOutput[MAX_PATH];
 	char pTitle[MAX_PATH];
 
-	sprintf_s(pOutput, "\n%s -> %s (%i)\n", pSort, pMessage, dError);
+	sprintf_s(pOutput, "\n%s (%i)\n", pMessage, dError);
 
 	Core->Logger(pOutput);
 	
@@ -175,6 +174,7 @@ VOID CCore::InputCommand() {
 			printf("/help : Prints this help message.\n");
 			printf("!help : Prints the help message related to Archipelago.\n");
 			printf("/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} [password:{PASSWORD}] : Connect to the specified server.\n");
+			printf("/debug on|off : Prints additional debug info \n");
 		}
 
 #ifdef DEBUG
@@ -197,7 +197,21 @@ VOID CCore::InputCommand() {
 			
 #endif
 
-		if (line.find("/connect ") == 0) {
+		if (line.find("/debug ") == 0) {
+			std::string param = line.substr(7);
+			BOOL res = (param.find("on") == 0);
+			if (res) {
+				Core->Logger("Debug logs activated", true, true);
+				Core->debugLogs = true;
+			}
+			else {
+				Core->Logger("Debug logs deactivated", true, true);
+				Core->debugLogs = false;
+			}
+
+			
+		} 
+		else if (line.find("/connect ") == 0) {
 			std::string param = line.substr(9);
 			int spaceIndex = param.find(" ");
 			if (spaceIndex == std::string::npos) {
@@ -215,7 +229,7 @@ VOID CCore::InputCommand() {
 				}
 				Core->pPassword = password;
 				if (!ArchipelagoInterface->Initialise(address)) {
-					Core->Panic("Failed to initialise Archipelago", "...\\Randomiser\\Core\\Core.cpp", AP_InitFailed, 1);
+					Core->Panic("Failed to initialise Archipelago", "", AP_InitFailed, 1);
 					int3
 				}
 			}
@@ -254,12 +268,14 @@ VOID CCore::ReadConfigFiles() {
 		for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
 			char buf[10];
 			sprintf(buf, "0x%x", it->first);
-			k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+			if(k.at("progressive_locations").contains(buf)) {
+				k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+			}
 		}
 	} catch (const std::exception&) {
-		Logger("Failed reading " + outputFolder + "/" + filename, true, false);
 		gameFile.close();
-		throw;
+		Core->Panic(("Failed reading " + outputFolder + "/" + filename).c_str(), "", AP_InitFailed, 1);
+		int3
 	}
 
 	gameFile.close();
