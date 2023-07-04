@@ -268,7 +268,9 @@ VOID CCore::ReadConfigFiles() {
 		for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
 			char buf[10];
 			sprintf(buf, "0x%x", it->first);
-			k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+			if(k.at("progressive_locations").contains(buf)) {
+				k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
+			}
 		}
 	} catch (const std::exception&) {
 		gameFile.close();
