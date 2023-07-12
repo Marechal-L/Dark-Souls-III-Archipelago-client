@@ -143,7 +143,11 @@ public:
 		{ 0x4000015E, -1 }, //Homeward Bone
 		{ 0x400001F4, -1 }, //Ember
 		{ 0x40000104, -1 }, //Green Blossom
+		{ 0x4000014A, -1 }, //Charcoal Pine Resin
+		{ 0x4000014B, -1 }, //Gold Pine Resin
 		{ 0x4000014E, -1 }, //Human Pine Resin
+		{ 0x4000014F, -1 }, //Carthus Rouge
+		{ 0x40000150, -1 }, //Pale Pine Resin
 		{ 0x40000154, -1 }, //Charcoal Pine Bundle
 		{ 0x40000157, -1 }, //Rotten Pine Resin
 		{ 0x40000175, -1 }, //Pale Tongue
