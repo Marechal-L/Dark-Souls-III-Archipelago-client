@@ -138,8 +138,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DINPUT8_EXPORTS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\json\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\websocketpp;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\valijson\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\wswrap\include;D:\Documents\Archipelagio\Games\DS3-Item-Randomiser-OS\dinput8\subprojects\asio\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>subprojects\wswrap\include;archipelago-client\subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,6 +177,8 @@
     <ClInclude Include="subprojects\minhook\src\hde\table32.h" />
     <ClInclude Include="subprojects\minhook\src\hde\table64.h" />
     <ClInclude Include="subprojects\minhook\src\trampoline.h" />
+    <ClInclude Include="subprojects\wswrap\include\wswrap.hpp" />
+    <ClInclude Include="subprojects\wswrap\include\wswrap_websocketpp.hpp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="_AutoEquip.asm" />

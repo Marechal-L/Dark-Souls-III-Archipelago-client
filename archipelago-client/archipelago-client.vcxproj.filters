@@ -61,7 +61,7 @@
       <Filter>Fichiers sources\ArchipelagoClient</Filter>
     </ClCompile>
     <ClCompile Include="subprojects\wswrap\src\wswrap.cpp">
-      <Filter>Fichiers de ressources</Filter>
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +96,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="subprojects\asio\asio\include\asio.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\wswrap\include\wswrap_websocketpp.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\wswrap\include\wswrap.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
