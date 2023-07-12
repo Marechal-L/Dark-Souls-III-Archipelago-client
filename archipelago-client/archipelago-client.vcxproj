@@ -140,7 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>subprojects\wswrap\include;archipelago-client\subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,7 +163,6 @@
     <ClCompile Include="subprojects\minhook\src\hde\hde64.c" />
     <ClCompile Include="subprojects\minhook\src\hook.c" />
     <ClCompile Include="subprojects\minhook\src\trampoline.c" />
-    <ClCompile Include="subprojects\wswrap\src\wswrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
