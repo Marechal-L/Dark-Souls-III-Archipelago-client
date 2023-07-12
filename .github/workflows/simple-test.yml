@@ -6,11 +6,11 @@ jobs:
   build:
     env:
       SOLUTION_FILE_PATH: .
-      BUILD_PLATFORM: "x86"
+      BUILD_PLATFORM: "x64"
       BUILD_CONFIGURATION: Release
       OPENSSL_SOLUTION_FILE_PATH: openssl1_1-lite.sln
-      OPENSSL_BUILD_PLATFORM: Win32
-      ARCH: win32    
+      OPENSSL_BUILD_PLATFORM: Win64
+      ARCH: win64   
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -28,12 +28,13 @@ jobs:
       
       - name: Build OpenSSL    
         run: |
+            cd archipelago-client
             cd dep
             git clone -b OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git
             cd openssl
-            md x86
-            cd x86
-            perl ..\Configure VC-WIN32 no-shared
+            md x64
+            cd x64
+            perl ..\Configure VC-WIN64 no-shared
             nmake /S
             
       - name: Add MSBuild to PATH
@@ -41,6 +42,7 @@ jobs:
         
       - name: Build Project
         run: |
+          cd archipelago-client
           dir
           msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}} /p:Platform=${{env.BUILD_PLATFORM}}
           md ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\ds3-client
