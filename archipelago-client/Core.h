@@ -37,7 +37,7 @@
 #define FE_MissingDLC 13
 #define FE_ApplySettings 14
 
-#define VERSION "2.2.0-SNAPSHOT"
+#define VERSION "2.2.0"
 
 
 struct SCore;
