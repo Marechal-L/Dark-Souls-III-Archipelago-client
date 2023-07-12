@@ -14,7 +14,7 @@ jobs:
       - uses: shogo82148/actions-setup-perl@v1
       
       - name: Build OpenSSL    
-      -  run: |
+        run: |
             cd dep
             git clone -b OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git
             cd openssl
