@@ -4,13 +4,13 @@ jobs:
   msbuild:
     runs-on: windows-latest
     steps:
-      - uses: shogo82148/actions-setup-perl@v1
-      - name: build
-      run: |
-          cd dep
-          git clone -b OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git
-          cd openssl
-          md x86
-          cd x86
-          perl ..\Configure VC-WIN32 no-shared
-          nmake /S
+        - name: build
+        - uses: shogo82148/actions-setup-perl@v1
+        run: |
+            cd dep
+            git clone -b OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git
+            cd openssl
+            md x86
+            cd x86
+            perl ..\Configure VC-WIN32 no-shared
+            nmake /S
