@@ -4,6 +4,8 @@ on: push
 
 jobs:
   build:
+    env:
+      ARCH: win32    
     runs-on: windows-latest
     steps:
       - name: Checkout code
@@ -12,6 +14,10 @@ jobs:
           submodules: recursive
           
       - uses: ilammy/setup-nasm@v1
+      
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{env.ARCH}}
 
       - uses: shogo82148/actions-setup-perl@v1
       
