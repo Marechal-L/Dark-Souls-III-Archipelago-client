@@ -6,6 +6,12 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          
+      - name: Build OpenSSL    
       - uses: shogo82148/actions-setup-perl@v1
       -  run: |
             cd dep
