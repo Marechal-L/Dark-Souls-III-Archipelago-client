@@ -34,7 +34,7 @@ jobs:
             cd openssl
             md x64
             cd x64
-            perl ..\Configure VC-WIN64 no-shared
+            perl ..\Configure VC-WIN64A no-shared 
             nmake /S
             
       - name: Add MSBuild to PATH
