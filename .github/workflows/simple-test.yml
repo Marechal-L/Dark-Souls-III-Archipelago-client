@@ -47,5 +47,5 @@ jobs:
       - name: Store
         uses: actions/upload-artifact@v3
         with:
-          name: dinput8
-          path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_PLATFORM}}\${{env.BUILD_CONFIGURATION}}\dinput8.dll
+          name: openSSLFolder
+          path: ${{env.SOLUTION_FILE_PATH}}\dep\openssl\${{env.BUILD_PLATFORM}}
