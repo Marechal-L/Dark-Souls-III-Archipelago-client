@@ -37,15 +37,18 @@ jobs:
             perl ..\Configure VC-WIN64A no-shared 
             nmake /S
             
+      - name: Store OpenSSL
+        uses: actions/upload-artifact@v3
+        with:
+          name: openSSLFolder
+          path: ${{env.SOLUTION_FILE_PATH}}\dep\openssl
+            
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
         
       - name: Build Project
         run: |
           msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}} /p:Platform=${{env.BUILD_PLATFORM}}
+          msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}} /p:Platform=${{env.BUILD_PLATFORM}}
           
-      - name: Store
-        uses: actions/upload-artifact@v3
-        with:
-          name: openSSLFolder
-          path: ${{env.SOLUTION_FILE_PATH}}\dep\openssl\${{env.BUILD_PLATFORM}}
+      
