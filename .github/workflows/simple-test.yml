@@ -37,11 +37,15 @@ jobs:
             perl ..\Configure VC-WIN64A no-shared 
             nmake /S
             
+      - uses: montudor/action-zip@v1
+        with:
+            args: zip -qq -r ${{env.SOLUTION_FILE_PATH}}\openSSL.zip ${{env.SOLUTION_FILE_PATH}}\dep\openssl
+            
       - name: Store OpenSSL
         uses: actions/upload-artifact@v3
         with:
-          name: openSSLFolder
-          path: ${{env.SOLUTION_FILE_PATH}}\dep\openssl
+          name: openSSL
+          path: ${{env.SOLUTION_FILE_PATH}}\openSSL.zip
             
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1
