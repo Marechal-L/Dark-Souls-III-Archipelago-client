@@ -2,6 +2,7 @@
 #define ASIO_STANDALONE
 #define _WEBSOCKETPP_CPP11_INTERNAL_
 #define _CRT_SECURE_NO_WARNINGS
+//#define WSWRAP_NO_SSL
 
 #include "subprojects/apclientpp/apclient.hpp"
 #include <windows.h>

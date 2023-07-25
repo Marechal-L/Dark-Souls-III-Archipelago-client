@@ -138,7 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DINPUT8_EXPORTS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>dep/openssl/include;subprojects\wswrap\include;subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>subprojects;dep;subprojects\wswrap\include;subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -148,7 +148,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
-      <AdditionalDependencies>dep/openssl/include/libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>subprojects\openssl\x64\libssl.lib;subprojects\openssl\x64\libcrypto.lib;subprojects\openssl\x64\libapps.lib;Crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -166,9 +166,11 @@
     <ClCompile Include="subprojects\minhook\src\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Downloads\openSSLFolder (1)\x64\include\openssl\opensslconf.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="GameHook.h" />
     <ClInclude Include="ArchipelagoInterface.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="subprojects\asio\asio\include\asio.hpp" />
     <ClInclude Include="subprojects\minhook\src\buffer.h" />
     <ClInclude Include="subprojects\minhook\src\hde\hde32.h" />
@@ -177,6 +179,111 @@
     <ClInclude Include="subprojects\minhook\src\hde\table32.h" />
     <ClInclude Include="subprojects\minhook\src\hde\table64.h" />
     <ClInclude Include="subprojects\minhook\src\trampoline.h" />
+    <ClInclude Include="subprojects\openssl\aes.h" />
+    <ClInclude Include="subprojects\openssl\asn1.h" />
+    <ClInclude Include="subprojects\openssl\asn1err.h" />
+    <ClInclude Include="subprojects\openssl\asn1t.h" />
+    <ClInclude Include="subprojects\openssl\asn1_mac.h" />
+    <ClInclude Include="subprojects\openssl\async.h" />
+    <ClInclude Include="subprojects\openssl\asyncerr.h" />
+    <ClInclude Include="subprojects\openssl\bio.h" />
+    <ClInclude Include="subprojects\openssl\bioerr.h" />
+    <ClInclude Include="subprojects\openssl\blowfish.h" />
+    <ClInclude Include="subprojects\openssl\bn.h" />
+    <ClInclude Include="subprojects\openssl\bnerr.h" />
+    <ClInclude Include="subprojects\openssl\buffer.h" />
+    <ClInclude Include="subprojects\openssl\buffererr.h" />
+    <ClInclude Include="subprojects\openssl\camellia.h" />
+    <ClInclude Include="subprojects\openssl\cast.h" />
+    <ClInclude Include="subprojects\openssl\cmac.h" />
+    <ClInclude Include="subprojects\openssl\cms.h" />
+    <ClInclude Include="subprojects\openssl\cmserr.h" />
+    <ClInclude Include="subprojects\openssl\comp.h" />
+    <ClInclude Include="subprojects\openssl\comperr.h" />
+    <ClInclude Include="subprojects\openssl\conf.h" />
+    <ClInclude Include="subprojects\openssl\conferr.h" />
+    <ClInclude Include="subprojects\openssl\conf_api.h" />
+    <ClInclude Include="subprojects\openssl\crypto.h" />
+    <ClInclude Include="subprojects\openssl\cryptoerr.h" />
+    <ClInclude Include="subprojects\openssl\ct.h" />
+    <ClInclude Include="subprojects\openssl\cterr.h" />
+    <ClInclude Include="subprojects\openssl\des.h" />
+    <ClInclude Include="subprojects\openssl\dh.h" />
+    <ClInclude Include="subprojects\openssl\dherr.h" />
+    <ClInclude Include="subprojects\openssl\dsa.h" />
+    <ClInclude Include="subprojects\openssl\dsaerr.h" />
+    <ClInclude Include="subprojects\openssl\dtls1.h" />
+    <ClInclude Include="subprojects\openssl\ebcdic.h" />
+    <ClInclude Include="subprojects\openssl\ec.h" />
+    <ClInclude Include="subprojects\openssl\ecdh.h" />
+    <ClInclude Include="subprojects\openssl\ecdsa.h" />
+    <ClInclude Include="subprojects\openssl\ecerr.h" />
+    <ClInclude Include="subprojects\openssl\engine.h" />
+    <ClInclude Include="subprojects\openssl\engineerr.h" />
+    <ClInclude Include="subprojects\openssl\err.h" />
+    <ClInclude Include="subprojects\openssl\evp.h" />
+    <ClInclude Include="subprojects\openssl\evperr.h" />
+    <ClInclude Include="subprojects\openssl\e_os2.h" />
+    <ClInclude Include="subprojects\openssl\hmac.h" />
+    <ClInclude Include="subprojects\openssl\idea.h" />
+    <ClInclude Include="subprojects\openssl\kdf.h" />
+    <ClInclude Include="subprojects\openssl\kdferr.h" />
+    <ClInclude Include="subprojects\openssl\lhash.h" />
+    <ClInclude Include="subprojects\openssl\md2.h" />
+    <ClInclude Include="subprojects\openssl\md4.h" />
+    <ClInclude Include="subprojects\openssl\md5.h" />
+    <ClInclude Include="subprojects\openssl\mdc2.h" />
+    <ClInclude Include="subprojects\openssl\modes.h" />
+    <ClInclude Include="subprojects\openssl\objects.h" />
+    <ClInclude Include="subprojects\openssl\objectserr.h" />
+    <ClInclude Include="subprojects\openssl\obj_mac.h" />
+    <ClInclude Include="subprojects\openssl\ocsp.h" />
+    <ClInclude Include="subprojects\openssl\ocsperr.h" />
+    <ClInclude Include="subprojects\openssl\opensslv.h" />
+    <ClInclude Include="subprojects\openssl\ossl_typ.h" />
+    <ClInclude Include="subprojects\openssl\pem.h" />
+    <ClInclude Include="subprojects\openssl\pem2.h" />
+    <ClInclude Include="subprojects\openssl\pemerr.h" />
+    <ClInclude Include="subprojects\openssl\pkcs12.h" />
+    <ClInclude Include="subprojects\openssl\pkcs12err.h" />
+    <ClInclude Include="subprojects\openssl\pkcs7.h" />
+    <ClInclude Include="subprojects\openssl\pkcs7err.h" />
+    <ClInclude Include="subprojects\openssl\rand.h" />
+    <ClInclude Include="subprojects\openssl\randerr.h" />
+    <ClInclude Include="subprojects\openssl\rand_drbg.h" />
+    <ClInclude Include="subprojects\openssl\rc2.h" />
+    <ClInclude Include="subprojects\openssl\rc4.h" />
+    <ClInclude Include="subprojects\openssl\rc5.h" />
+    <ClInclude Include="subprojects\openssl\ripemd.h" />
+    <ClInclude Include="subprojects\openssl\rsa.h" />
+    <ClInclude Include="subprojects\openssl\rsaerr.h" />
+    <ClInclude Include="subprojects\openssl\safestack.h" />
+    <ClInclude Include="subprojects\openssl\seed.h" />
+    <ClInclude Include="subprojects\openssl\sha.h" />
+    <ClInclude Include="subprojects\openssl\srp.h" />
+    <ClInclude Include="subprojects\openssl\srtp.h" />
+    <ClInclude Include="subprojects\openssl\ssl.h" />
+    <ClInclude Include="subprojects\openssl\ssl2.h" />
+    <ClInclude Include="subprojects\openssl\ssl3.h" />
+    <ClInclude Include="subprojects\openssl\sslerr.h" />
+    <ClInclude Include="subprojects\openssl\stack.h" />
+    <ClInclude Include="subprojects\openssl\store.h" />
+    <ClInclude Include="subprojects\openssl\storeerr.h" />
+    <ClInclude Include="subprojects\openssl\symhacks.h" />
+    <ClInclude Include="subprojects\openssl\tls1.h" />
+    <ClInclude Include="subprojects\openssl\ts.h" />
+    <ClInclude Include="subprojects\openssl\tserr.h" />
+    <ClInclude Include="subprojects\openssl\txt_db.h" />
+    <ClInclude Include="subprojects\openssl\ui.h" />
+    <ClInclude Include="subprojects\openssl\uierr.h" />
+    <ClInclude Include="subprojects\openssl\whrlpool.h" />
+    <ClInclude Include="subprojects\openssl\x509.h" />
+    <ClInclude Include="subprojects\openssl\x509err.h" />
+    <ClInclude Include="subprojects\openssl\x509v3.h" />
+    <ClInclude Include="subprojects\openssl\x509v3err.h" />
+    <ClInclude Include="subprojects\openssl\x509_vfy.h" />
+    <ClInclude Include="subprojects\openssl\__DECC_INCLUDE_EPILOGUE.H" />
+    <ClInclude Include="subprojects\openssl\__DECC_INCLUDE_PROLOGUE.H" />
     <ClInclude Include="subprojects\wswrap\include\wswrap.hpp" />
     <ClInclude Include="subprojects\wswrap\include\wswrap_websocketpp.hpp" />
   </ItemGroup>
@@ -188,6 +295,9 @@
     <MASM Include="dinput8_asm.asm">
       <FileType>Document</FileType>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="archipelago-client.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
