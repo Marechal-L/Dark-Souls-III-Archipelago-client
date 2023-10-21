@@ -112,7 +112,7 @@ VOID CGameHook::killThePlayer() {
 	WriteProcessMemory(hProcess, (BYTE*)healthPointAddr, &newHP, sizeof(newHP), nullptr);
 }
 
-BOOL CGameHook::updateRuntimeValues() {
+VOID CGameHook::updateRuntimeValues() {
 
 	DWORD processId = GetCurrentProcessId();
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, processId);

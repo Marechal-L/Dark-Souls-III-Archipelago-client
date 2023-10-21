@@ -16,7 +16,7 @@ public:
 	virtual BOOL preInitialize();
 	virtual BOOL initialize();
 	virtual BOOL applySettings();
-	virtual BOOL updateRuntimeValues();
+	virtual VOID updateRuntimeValues();
 	virtual VOID giveItems();
 	virtual VOID itemGib(DWORD itemId);
 	virtual BOOL isSoulOfCinderDefeated();
