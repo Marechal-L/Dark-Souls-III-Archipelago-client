@@ -37,14 +37,11 @@ BOOL CArchipelago::Initialise(std::string URI) {
 		// read the archipelago slot data
 
 		//Mandatory values
-		if (!data.contains("locationsId") || !data.contains("locationsAddress") || !data.contains("locationsTarget") || !data.contains("itemsId")
-			|| !data.contains("itemsAddress") || !data.contains("base_id") || !data.contains("seed") || !data.contains("slot")) {
-			Core->Panic("Please check the following values : [locationsId], [locationsAddress], [locationsTarget], [itemsId], [itemsAddress], [base_id], [seed] and [slot]", "One of the mandatory values is missing in the slot data", AP_MissingValue, 1);
+		if (!data.contains("itemsId") || !data.contains("itemsAddress") || !data.contains("base_id") ||
+			!data.contains("seed") || !data.contains("slot")) {
+			Core->Panic("Please check the following values : [itemsId], [itemsAddress], [base_id], [seed] and [slot]", "One of the mandatory values is missing in the slot data", AP_MissingValue, 1);
 		}
 
-		data.at("locationsId").get_to(ItemRandomiser->pLocationsId);
-		data.at("locationsAddress").get_to(ItemRandomiser->pLocationsAddress);
-		data.at("locationsTarget").get_to(ItemRandomiser->pLocationsTarget);
 		data.at("itemsId").get_to(ItemRandomiser->pItemsId);
 		data.at("itemsAddress").get_to(ItemRandomiser->pItemsAddress);
 		data.at("base_id").get_to(ItemRandomiser->pBaseId);

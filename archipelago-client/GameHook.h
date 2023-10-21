@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "Params.h"
 #include "./subprojects/minhook/include/MinHook.h"
 
 #define ItemType_Weapon 0
@@ -10,6 +11,7 @@
 struct SEquipBuffer;
 
 typedef VOID fEquipItem(DWORD dSlot, SEquipBuffer* E);
+typedef ULONGLONG(*OnGetItemType)(UINT_PTR, DWORD, DWORD, DWORD, UINT_PTR);
 
 class CGameHook {
 public:
@@ -49,6 +51,7 @@ private:
 	static uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, std::vector<unsigned int> offsets);
 	static uintptr_t FindDMAAddyStandalone(uintptr_t ptr, std::vector<unsigned int> offsets);
 	static BOOL Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen);
+	static BOOL SimpleHook(LPVOID pAddress, LPVOID pDetour, LPVOID* ppOriginal);
 	static VOID LockEquipSlots();
 	static VOID RemoveSpellsRequirements();
 	static VOID RemoveEquipLoad();
@@ -113,87 +116,14 @@ private:
 class CItemRandomiser {
 public:
 	virtual VOID RandomiseItem(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+	virtual VOID OnGetSyntheticItem(EquipParamGoodsRow* row);
 	
-	std::vector<DWORD> pLocationsId = { };
-	std::vector<DWORD> pLocationsAddress = { };
-	std::vector<DWORD> pLocationsTarget = { };
+	OnGetItemType OnGetItemOriginal;
 	std::vector<DWORD> pItemsId = { };
 	std::vector<DWORD> pItemsAddress = { };
 	int pBaseId = 0;
 	std::deque<DWORD> receivedItemsQueue = { };
 	std::list<int64_t> checkedLocationsList = { };
-	std::map<DWORD, int> progressiveLocations{
-		{ 0x400003E8, -1 }, //Titanite Shard
-		{ 0x400003E9, -1 }, //Large Titanite Shard
-		{ 0x400003EA, -1 }, //Titanite Chunk
-		{ 0x400003FC, -1 }, //Titanite Scale
-		{ 0x400003EB, -1 }, //Titanite Slab
-		{ 0x4000085D, -1 }, //Estus Shard
-		{ 0x4000085F, -1 }, //Undead Bone Shard
-		{ 0x40000124, -1 }, //Firebomb
-		{ 0x40000136, -1 }, //Throwing Knife
-		{ 0x40000190, -1 }, //Faded Soul
-		{ 0x40000191, -1 }, //Soul of a Deserted Corpse
-		{ 0x40000192, -1 }, //Large Soul of a Deserted Corpse
-		{ 0x40000193, -1 }, //Soul of an Unknown Traveler
-		{ 0x40000194, -1 }, //Large Soul of an Unknown Traveler
-		{ 0x40000195, -1 }, //Soul of a Nameless Soldier
-		{ 0x40000196, -1 }, //Large Soul of a Nameless Soldier
-		{ 0x20004EF2, -1 }, //Ring of Sacrifice
-		{ 0x4000015E, -1 }, //Homeward Bone
-		{ 0x400001F4, -1 }, //Ember
-		{ 0x40000104, -1 }, //Green Blossom
-		{ 0x4000014A, -1 }, //Charcoal Pine Resin
-		{ 0x4000014B, -1 }, //Gold Pine Resin
-		{ 0x4000014E, -1 }, //Human Pine Resin
-		{ 0x4000014F, -1 }, //Carthus Rouge
-		{ 0x40000150, -1 }, //Pale Pine Resin
-		{ 0x40000154, -1 }, //Charcoal Pine Bundle
-		{ 0x40000157, -1 }, //Rotten Pine Resin
-		{ 0x40000175, -1 }, //Pale Tongue
-		{ 0x40000126, -1 }, //Alluring Skull
-		{ 0x40000128, -1 }, //Undead Hunter Charm
-		{ 0x40000130, -1 }, //Duel Charm
-		{ 0x400001C7, -1 }, //Rusted Coin
-		{ 0x400001C9, -1 }, //Rusted Gold Coin
-		{ 0x40000406, -1 }, //Twinkling Titanite
-		{ 0x40000197, -1 }, //Soul of a Weary Warrior
-		{ 0x40000198, -1 }, //Large Soul of a Weary Warrior
-		{ 0x40000199, -1 }, //Soul of a Crestfallen Knight
-		{ 0x4000019A, -1 }, //Large Soul of a Crestfallen Knight
-		{ 0x400000F0, -1 }, //Divine Blessing
-		{ 0x400000F1, -1 }, //Hidden Blessing
-		{ 0x40000106, -1 }, //Budding Green Blossom
-		{ 0x4000010E, -1 }, //Bloodred Moss Clump
-		{ 0x4000010F, -1 }, //Purple Moss Clump
-		{ 0x40000110, -1 }, //Blooming Purple Moss Clump
-		{ 0x40000112, -1 }, //Purging Stone
-		{ 0x40000114, -1 }, //Rime-blue Moss Clump
-		{ 0x40000118, -1 }, //Repair Powder
-		{ 0x40000122, -1 }, //Kukri
-		{ 0x4000012C, -1 }, //Lightning Urn
-		{ 0x4000017C, -1 }, //Rubbish
-		{ 0x400001CA, -1 }, //Blue Bug Pellet
-		{ 0x400001CB, -1 }, //Red Bug Pellet
-		{ 0x400001CC, -1 }, //Yellow Bug Pellet
-		{ 0x400001CD, -1 }, //Black Bug Pellet
-		{ 0x4000044C, -1 }, //Heavy Gem
-		{ 0x40000456, -1 }, //Sharp Gem
-		{ 0x40000460, -1 }, //Refined Gem
-		{ 0x4000046A, -1 }, //Crystal Gem
-		{ 0x40000474, -1 }, //Simple Gem
-		{ 0x4000047E, -1 }, //Fire Gem
-		{ 0x40000488, -1 }, //Chaos Gem
-		{ 0x40000492, -1 }, //Lightning Gem
-		{ 0x4000049C, -1 }, //Deep Gem
-		{ 0x400004A6, -1 }, //Dark Gem
-		{ 0x400004B0, -1 }, //Poison Gem
-		{ 0x400004BA, -1 }, //Blood Gem
-		{ 0x400004C4, -1 }, //Raw Gem
-		{ 0x400004CE, -1 }, //Blessed Gem
-		{ 0x400004D8, -1 }, //Hollow Gem
-		{ 0x400004E2, -1 }, //Shriving Stone
-	};
 	bool enablePathOfTheDragon;
 
 private:
@@ -226,6 +156,8 @@ extern "C" DWORD64 qItemEquipComms;
 extern "C" DWORD64 rItemRandomiser;
 extern "C" VOID tItemRandomiser();
 extern "C" VOID fItemRandomiser(UINT_PTR qWorldChrMan, UINT_PTR pItemBuffer, UINT_PTR pItemData, DWORD64 qReturnAddress);
+
+extern "C" ULONGLONG fOnGetItem(UINT_PTR pEquipInventoryData, DWORD qItemCategory, DWORD qItemID, DWORD qCount, UINT_PTR qUnknown2);
 
 extern "C" DWORD64 rAutoEquip;
 extern "C" VOID tAutoEquip();

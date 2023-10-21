@@ -95,9 +95,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;DINPUT8_EXPORTS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>subprojects;dep;subprojects\wswrap\include;subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>subprojects;dep;subprojects\wswrap\include;subprojects\apclientpp;subprojects\asio\asio\include;subprojects\json\include;subprojects\minhook\include;subprojects\valijson\include;subprojects\websocketpp;subprojects\mem\include;subprojects\fd4_singleton;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,7 +110,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -127,6 +127,7 @@
     <ClCompile Include="ItemRandomiser.cpp" />
     <ClCompile Include="NoRequirements.cpp" />
     <ClCompile Include="ArchipelagoInterface.cpp" />
+    <ClCompile Include="subprojects\fd4_singleton\fd4_singleton.cpp" />
     <ClCompile Include="subprojects\minhook\src\buffer.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde32.c" />
     <ClCompile Include="subprojects\minhook\src\hde\hde64.c" />
@@ -138,8 +139,34 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="GameHook.h" />
     <ClInclude Include="ArchipelagoInterface.h" />
+    <ClInclude Include="Params.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="subprojects\asio\asio\include\asio.hpp" />
+    <ClInclude Include="subprojects\fd4_singleton\fd4_singleton.h" />
+    <ClInclude Include="subprojects\mem\include\mem\aligned_alloc.h" />
+    <ClInclude Include="subprojects\mem\include\mem\arch.h" />
+    <ClInclude Include="subprojects\mem\include\mem\bitwise_enum.h" />
+    <ClInclude Include="subprojects\mem\include\mem\boyer_moore_scanner.h" />
+    <ClInclude Include="subprojects\mem\include\mem\char_queue.h" />
+    <ClInclude Include="subprojects\mem\include\mem\cmd_param-inl.h" />
+    <ClInclude Include="subprojects\mem\include\mem\cmd_param.h" />
+    <ClInclude Include="subprojects\mem\include\mem\data_buffer.h" />
+    <ClInclude Include="subprojects\mem\include\mem\defines.h" />
+    <ClInclude Include="subprojects\mem\include\mem\execution_handler.h" />
+    <ClInclude Include="subprojects\mem\include\mem\hasher.h" />
+    <ClInclude Include="subprojects\mem\include\mem\init_function.h" />
+    <ClInclude Include="subprojects\mem\include\mem\macros.h" />
+    <ClInclude Include="subprojects\mem\include\mem\mem.h" />
+    <ClInclude Include="subprojects\mem\include\mem\module.h" />
+    <ClInclude Include="subprojects\mem\include\mem\pattern.h" />
+    <ClInclude Include="subprojects\mem\include\mem\pattern_cache.h" />
+    <ClInclude Include="subprojects\mem\include\mem\protect.h" />
+    <ClInclude Include="subprojects\mem\include\mem\prot_flags.h" />
+    <ClInclude Include="subprojects\mem\include\mem\rtti.h" />
+    <ClInclude Include="subprojects\mem\include\mem\simd_scanner.h" />
+    <ClInclude Include="subprojects\mem\include\mem\slice.h" />
+    <ClInclude Include="subprojects\mem\include\mem\stub.h" />
+    <ClInclude Include="subprojects\mem\include\mem\utils.h" />
     <ClInclude Include="subprojects\minhook\src\buffer.h" />
     <ClInclude Include="subprojects\minhook\src\hde\hde32.h" />
     <ClInclude Include="subprojects\minhook\src\hde\hde64.h" />
@@ -263,6 +290,7 @@
     <MASM Include="dinput8_asm.asm">
       <FileType>Document</FileType>
     </MASM>
+    <None Include="subprojects\mem\include\mem\cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="archipelago-client.rc" />

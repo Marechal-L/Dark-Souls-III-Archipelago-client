@@ -27,7 +27,8 @@ BOOL CGameHook::preInitialize() {
 	}
 
 	try {
-		return Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5);
+		return Hook(0x1407BBA80, (DWORD64)&tItemRandomiser, &rItemRandomiser, 5)
+			&& SimpleHook((LPVOID)0x14058aa20, (LPVOID)&fOnGetItem, (LPVOID*)&ItemRandomiser->OnGetItemOriginal);
 	} catch (const std::exception&) {
 		Core->Logger("Cannot hook the game 0x1407BBA80");
 	}
@@ -188,12 +189,15 @@ VOID CGameHook::itemGib(DWORD itemId) {
 
 BOOL CGameHook::Hook(DWORD64 qAddress, DWORD64 qDetour, DWORD64* pReturn, DWORD dByteLen) {
 
-	MH_STATUS status = MH_CreateHook((LPVOID)qAddress, (LPVOID)qDetour, 0);
-	if (status != MH_OK) return false;
-	if (MH_EnableHook((LPVOID)qAddress) != MH_OK) return false;
-
 	*pReturn = (qAddress + dByteLen);
+	return SimpleHook((LPVOID)qAddress, (LPVOID)qDetour, 0);
+}
 
+BOOL CGameHook::SimpleHook(LPVOID pAddress, LPVOID pDetour, LPVOID* ppOriginal) {
+
+	MH_STATUS status = MH_CreateHook(pAddress, pDetour, ppOriginal);
+	if (status != MH_OK) return false;
+	if (MH_EnableHook(pAddress) != MH_OK) return false;
 	return true;
 }
 
