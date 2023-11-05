@@ -19,9 +19,12 @@ This mod works with a single dll file but we also provide a way to downpatch the
 	Connect by entering SERVER_IP, SERVER_PORT and USERNAME. You can additionaly add a PASSWORD if requested by the server.
 	
 ## Troubleshoots
-- The provided dll requires other dependencies so if you encounter a crash when launching the game,
-installing the latest Microsoft Visual C++ Redistributable version could fix it : https://aka.ms/vs/17/release/vc_redist.x64.exe.
-- The Windows console tends to freeze preventing you from sending or receiving any items. You must Alt+Tab, click on the console and press enter to refresh it.
+- The provided dll requires other dependencies so if you encounter a crash when launching the game.
+   - installing the latest Microsoft Visual C++ Redistributable version should fix it : https://aka.ms/vs/17/release/vc_redist.x64.exe.
+- The Windows console tends to freeze preventing you from sending or receiving any items.
+   - You must Alt+Tab, click on the console and press enter to refresh it.
+- When trying to stream the Dark Souls 3 window to Discord when the Archipelago mod is used along ModEngine, the game crashes instantly with "Fatal Application Exit" window containing the ExpCode 0x80000003.
+   - Change the modengine.ini file and set `blockNetworkAccess=0`
 
 ## Credits
 https://github.com/LukeYui/DS3-Item-Randomiser-OS by LukeYui  
