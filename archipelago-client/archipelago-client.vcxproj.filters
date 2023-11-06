@@ -60,6 +60,9 @@
     <ClCompile Include="ArchipelagoInterface.cpp">
       <Filter>Fichiers sources\ArchipelagoClient</Filter>
     </ClCompile>
+    <ClCompile Include="subprojects\fd4_singleton\fd4_singleton.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -422,11 +425,90 @@
     <ClInclude Include="..\..\..\..\Downloads\openSSLFolder (1)\x64\include\openssl\opensslconf.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Params.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\fd4_singleton\fd4_singleton.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\aligned_alloc.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\arch.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\bitwise_enum.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\boyer_moore_scanner.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\char_queue.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\cmd_param-inl.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\cmd_param.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\data_buffer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\defines.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\execution_handler.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\hasher.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\init_function.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\macros.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\mem.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\module.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\pattern.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\pattern_cache.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\protect.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\prot_flags.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\rtti.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\simd_scanner.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\slice.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\stub.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="subprojects\mem\include\mem\utils.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dinput8.def">
       <Filter>Fichiers sources\Core</Filter>
     </None>
+    <None Include="subprojects\mem\include\mem\cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="dinput8_asm.asm">

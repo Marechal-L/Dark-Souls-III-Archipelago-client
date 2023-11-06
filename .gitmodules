@@ -17,3 +17,6 @@
 [submodule "archipelago-client/subprojects/apclientpp"]
 	path = archipelago-client/subprojects/apclientpp
 	url = https://github.com/black-sliver/apclientpp.git
+[submodule "archipelago-client/subprojects/mem"]
+	path = archipelago-client/subprojects/mem
+	url = https://github.com/0x1F9F1/mem.git

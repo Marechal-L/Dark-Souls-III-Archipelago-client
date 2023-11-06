@@ -264,14 +264,6 @@ VOID CCore::ReadConfigFiles() {
 	try {
 		gameFile >> k;
 		k.at("last_received_index").get_to(pLastReceivedIndex);
-		std::map<DWORD, int>::iterator it;
-		for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
-			char buf[10];
-			sprintf(buf, "0x%x", it->first);
-			if(k.at("progressive_locations").contains(buf)) {
-				k.at("progressive_locations").at(buf).get_to(ItemRandomiser->progressiveLocations[it->first]);
-			}
-		}
 	} catch (const std::exception&) {
 		gameFile.close();
 		Core->Panic(("Failed reading " + outputFolder + "/" + filename).c_str(), "", AP_InitFailed, 1);
@@ -295,13 +287,6 @@ VOID CCore::SaveConfigFiles() {
 
 	json j;
 	j["last_received_index"] = pLastReceivedIndex;
-	
-	std::map<DWORD, int>::iterator it;
-	for (it = ItemRandomiser->progressiveLocations.begin(); it != ItemRandomiser->progressiveLocations.end(); it++) {
-		char buf[20];
-		sprintf(buf, "0x%x", it->first);
-		j["progressive_locations"][buf] = it->second;
-	}
 
 	try {
 		if (CreateDirectory(outputFolder.c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError()) {

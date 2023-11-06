@@ -26,6 +26,17 @@ This mod works with a single dll file but we also provide a way to downpatch the
 - When trying to stream the Dark Souls 3 window to Discord when the Archipelago mod is used along ModEngine, the game crashes instantly with "Fatal Application Exit" window containing the ExpCode 0x80000003.
    - Change the modengine.ini file and set `blockNetworkAccess=0`
 
+## Building Locally
+
+1. Clone the repository (`git clone https://github.com/Marechal-L/Dark-Souls-III-Archipelago-clieng.git`).
+2. Open `archipelago-client\archipelago-client.sln` in Visual Studio.
+3. [Install OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html).
+4. Create an empty `archipelago-client\subprojects\openssl\x64` directory.
+5. Find the OpenSSL installation directory (probably `C:\Program Files\OpenSSL-Win64`) and copy
+   `lib\libssl.lib`, `lib\libcrypto.lib`, and `lib\libapps.lib` into
+   `archipelago-client\subprojects\openssl\x64`.
+6. 
+
 ## Credits
 https://github.com/LukeYui/DS3-Item-Randomiser-OS by LukeYui  
 https://github.com/black-sliver/apclientpp by black-sliver
