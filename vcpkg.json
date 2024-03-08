@@ -1,0 +1,15 @@
+{
+  "dependencies": [
+    {
+      "name": "asio",
+      "features": [
+        "openssl"
+      ]
+    },
+    "boost-thread",
+    "minhook",
+    "nlohmann-json",
+    "valijson",
+    "websocketpp"
+  ]
+}
