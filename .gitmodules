@@ -1,19 +1,6 @@
-[submodule "archipelago-client/subprojects/minhook"]
-	path = archipelago-client/subprojects/minhook
-	url = https://github.com/TsudaKageyu/minhook.git
-
-[submodule "archipelago-client/subprojects/asio"]
-	path = archipelago-client/subprojects/asio
-	url = https://github.com/chriskohlhoff/asio.git	
-	
-[submodule "archipelago-client/subprojects/wswrap"]
-	path = archipelago-client/subprojects/wswrap
-	url = https://github.com/black-sliver/wswrap.git
-	
-[submodule "archipelago-client/subprojects/websocketpp"]
-	path = archipelago-client/subprojects/websocketpp
-	url = https://github.com/zaphoyd/websocketpp.git
-
-[submodule "archipelago-client/subprojects/apclientpp"]
-	path = archipelago-client/subprojects/apclientpp
+[submodule "subprojects/apclientpp/apclientpp"]
+	path = subprojects/apclientpp/apclientpp
 	url = https://github.com/black-sliver/apclientpp.git
+[submodule "subprojects/wswrap/wswrap"]
+	path = subprojects/wswrap/wswrap
+	url = https://github.com/black-sliver/wswrap.git

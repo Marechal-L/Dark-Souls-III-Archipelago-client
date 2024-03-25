@@ -87,7 +87,7 @@ StyleCopReport.xml
 *.tli
 *.tlh
 *.tmp
-*.tmp_proj
+*.tmp_projd changes done to this unstaged f
 *_wpftmp.csproj
 *.log
 *.tlog
@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+Testing
+install_manifest.txt
+_deps
+*.log
+build/
+vcpkg_installed/
